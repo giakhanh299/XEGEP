@@ -2,23 +2,23 @@ import { BookingRecord, BookingStatus, TripRecord } from '@/lib/types';
 import { DriverPayoutRecord, PaymentRecord } from '@/lib/types';
 
 export const mockMetrics = [
-  { label: 'Total Bookings', value: '128', detail: 'Across both core routes.' },
-  { label: 'Active Trips', value: '14', detail: 'Trips currently in progress.' },
-  { label: 'Completed Trips', value: '94', detail: 'Successfully finished journeys.' },
-  { label: 'Revenue', value: '11.8M', detail: 'Estimated monthly revenue (VND).' }
+  { label: 'Tổng chuyến', value: '128', detail: 'Trên cả hai tuyến chính.' },
+  { label: 'Chuyến đang chạy', value: '14', detail: 'Các chuyến đang thực hiện.' },
+  { label: 'Chuyến hoàn thành', value: '94', detail: 'Các chuyến đã hoàn tất.' },
+  { label: 'Doanh thu', value: '11.8M', detail: 'Doanh thu ước tính theo tháng (VND).' }
 ];
 
 export const routeHighlights = [
-  { label: 'Dai Loc → Da Nang', description: 'Morning and evening commuter demand.' },
-  { label: 'Da Nang → Dai Loc', description: 'Return trips and inbound passenger flow.' }
+  { label: 'Đại Lộc → Đà Nẵng', description: 'Nhu cầu đi lại buổi sáng và buổi tối.' },
+  { label: 'Đà Nẵng → Đại Lộc', description: 'Các chuyến chiều về và luồng khách đi vào.' }
 ];
 
 export const mockCustomerBooking: BookingRecord = {
   id: 'booking_1',
   customerName: 'Pham Minh Tuan',
   phone: '0901 234 567',
-  pickupLocation: 'Dai Loc Bus Station',
-  dropoffLocation: 'Da Nang Center',
+  pickupLocation: 'Bến xe Đại Lộc',
+  dropoffLocation: 'Trung tâm Đà Nẵng',
   travelDate: '2026-06-03',
   travelTime: '06:30',
   pickupLat: null,
@@ -26,7 +26,7 @@ export const mockCustomerBooking: BookingRecord = {
   dropoffLat: null,
   dropoffLng: null,
   passengerCount: 3,
-  notes: 'Need rear seat space for bags.',
+  notes: 'Cần chỗ ghế sau để để hành lý.',
   status: 'matching',
   routeType: 'dai_loc_to_da_nang',
   paymentStatus: 'unpaid',
@@ -42,8 +42,8 @@ export const mockBookings: BookingRecord[] = [
     ...mockCustomerBooking,
     id: 'booking_2',
     customerName: 'Le Thi Hoa',
-    pickupLocation: 'Da Nang Airport',
-    dropoffLocation: 'Dai Loc Town',
+    pickupLocation: 'Sân bay Đà Nẵng',
+    dropoffLocation: 'Thị trấn Đại Lộc',
     status: 'confirmed'
   },
   {
@@ -59,12 +59,12 @@ export const mockTrips: TripRecord[] = [
   {
     id: 'trip_1',
     routeType: 'dai_loc_to_da_nang',
-    routeLabel: 'Dai Loc → Da Nang',
+    routeLabel: 'Đại Lộc → Đà Nẵng',
     vehicleId: 'vehicle_1',
-    vehicle: '7-seat vehicle',
+    vehicle: 'Xe 7 chỗ',
     driverId: 'driver_1',
     driver: 'Nguyen Van A',
-    schedule: '06:30 AM departure',
+    schedule: 'Khởi hành 06:30',
     passengerCount: 4,
     maxCapacity: 4,
     tripStatus: 'ready',
@@ -78,12 +78,12 @@ export const mockTrips: TripRecord[] = [
   {
     id: 'trip_2',
     routeType: 'da_nang_to_dai_loc',
-    routeLabel: 'Da Nang → Dai Loc',
+    routeLabel: 'Đà Nẵng → Đại Lộc',
     vehicleId: 'vehicle_2',
-    vehicle: '4-seat vehicle',
+    vehicle: 'Xe 4 chỗ',
     driverId: 'driver_2',
     driver: 'Tran Thi B',
-    schedule: '05:00 PM departure',
+    schedule: 'Khởi hành 17:00',
     passengerCount: 6,
     maxCapacity: 7,
     tripStatus: 'in_progress',
@@ -132,13 +132,13 @@ export const mockDriverPayouts: DriverPayoutRecord[] = [
 ];
 
 export const mockDrivers = [
-  { id: 'driver_1', fullName: 'Nguyen Van A', phone: '0909 111 222' },
-  { id: 'driver_2', fullName: 'Tran Thi B', phone: '0909 333 444' }
+  { id: 'driver_1', fullName: 'Nguyễn Văn A', phone: '0909 111 222' },
+  { id: 'driver_2', fullName: 'Trần Thị B', phone: '0909 333 444' }
 ];
 
 export const mockDriverStops = [
-  { label: 'Trip 1 - Dai Loc → Da Nang', subtitle: 'Pickup sequence ready for dispatch.', passengers: 4 },
-  { label: 'Trip 2 - Da Nang → Dai Loc', subtitle: 'Passenger pick-up list in progress.', passengers: 6 }
+  { label: 'Chuyến 1 - Đại Lộc → Đà Nẵng', subtitle: 'Danh sách đón khách đã sẵn sàng.', passengers: 4 },
+  { label: 'Chuyến 2 - Đà Nẵng → Đại Lộc', subtitle: 'Danh sách đón khách đang được cập nhật.', passengers: 6 }
 ];
 
 export const mockBookingStatuses: BookingStatus[] = [

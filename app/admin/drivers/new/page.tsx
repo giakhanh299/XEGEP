@@ -7,8 +7,8 @@ export default async function AdminDriverCreatePage() {
 
   return (
     <SectionCard
-      title="Create driver"
-      description="Manually add a driver account, profile, and vehicle media."
+      title="Tạo tài xế"
+      description="Thêm thủ công tài khoản tài xế, hồ sơ và ảnh xe."
       className="max-w-5xl"
     >
       <AdminDriverCreateForm />

@@ -1,6 +1,21 @@
 import { BookingStatus, TripStatus } from '@/types/domain';
 
 export function StatusBadge({ status }: { status: BookingStatus | TripStatus }) {
+  const labels: Record<string, string> = {
+    pending: 'Chờ xử lý',
+    accepted: 'Đã nhận chuyến',
+    matching: 'Đang ghép chuyến',
+    confirmed: 'Đã xác nhận',
+    driver_assigned: 'Đã phân tài xế',
+    on_the_way: 'Đang trên đường',
+    completed: 'Hoàn thành',
+    cancelled: 'Đã hủy',
+    draft: 'Nháp',
+    boarding: 'Đang đón khách',
+    scheduled: 'Đã lên lịch',
+    ready: 'Sẵn sàng',
+    in_progress: 'Đang thực hiện'
+  };
   const styles: Record<string, string> = {
     pending: 'bg-slate-200/10 text-slate-200',
     accepted: 'bg-emerald-400/10 text-emerald-200',
@@ -18,8 +33,8 @@ export function StatusBadge({ status }: { status: BookingStatus | TripStatus }) 
   };
 
   return (
-    <span className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${styles[status] ?? styles.pending}`}>
-      {status.replaceAll('_', ' ')}
+    <span className={`rounded-full px-3 py-1 text-xs font-semibold ${styles[status] ?? styles.pending}`}>
+      {labels[status] ?? status}
     </span>
   );
 }

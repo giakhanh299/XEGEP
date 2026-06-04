@@ -62,13 +62,13 @@ export function VehicleBrowser({ vehicles }: { vehicles: VehicleCard[] }) {
             </div>
             <div className="grid gap-2 text-sm text-slate-300 sm:grid-cols-2">
               <p>
-                <strong className="text-white">Seats:</strong> {vehicle.seatCount}
+                <strong className="text-white">Số ghế:</strong> {vehicle.seatCount}
               </p>
               <p>
-                <strong className="text-white">Available:</strong> {vehicle.availableSeats}
+                <strong className="text-white">Còn trống:</strong> {vehicle.availableSeats}
               </p>
               <p>
-                <strong className="text-white">Area:</strong> {vehicle.serviceArea}
+                <strong className="text-white">Khu vực:</strong> {vehicle.serviceArea}
               </p>
             </div>
             {vehicle.description ? <p className="text-sm leading-6 text-slate-300">{vehicle.description}</p> : null}
@@ -77,7 +77,7 @@ export function VehicleBrowser({ vehicles }: { vehicles: VehicleCard[] }) {
               className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-400 px-4 py-3 font-semibold text-slate-950"
             >
               <Bookmark className="h-4 w-4" />
-              Book now
+              Đặt xe ngay
             </Link>
           </div>
         </article>

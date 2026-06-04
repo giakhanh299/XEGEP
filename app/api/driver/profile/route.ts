@@ -6,7 +6,7 @@ import { validateAvailableSeatCount, validateNonEmpty, validatePhoneNumber, vali
 export async function GET() {
   const session = await getSessionFromCookies();
   if (!session || session.role !== 'driver') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: 'Không có quyền truy cập' }, { status: 401 });
   }
 
   const driver = await getDriverByUserId(session.userId);
@@ -16,7 +16,7 @@ export async function GET() {
 export async function PUT(request: Request) {
   const session = await getSessionFromCookies();
   if (!session || session.role !== 'driver') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: 'Không có quyền truy cập' }, { status: 401 });
   }
 
   const body = await request.json();
@@ -29,7 +29,7 @@ export async function PUT(request: Request) {
     !validateAvailableSeatCount(Number(body.availableSeats ?? body.seatCount ?? 0)) ||
     !validateNonEmpty(String(body.serviceArea ?? ''))
   ) {
-    return NextResponse.json({ error: 'Invalid driver profile' }, { status: 400 });
+    return NextResponse.json({ error: 'Hồ sơ tài xế không hợp lệ' }, { status: 400 });
   }
 
   const driver = await updateDriverProfile(session.userId, {

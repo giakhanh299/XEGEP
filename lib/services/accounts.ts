@@ -356,7 +356,7 @@ export async function registerAccount(input: {
 }) {
   const existing = await getUserByUsername(input.username);
   if (existing) {
-    throw new Error('Username already exists');
+    throw new Error('Tên đăng nhập đã tồn tại');
   }
 
   const user: UserAccountRecord = {
@@ -429,7 +429,7 @@ export async function registerAccount(input: {
     serviceArea: (input.serviceArea ?? '').trim(),
     telegramChatId: input.telegramChatId?.trim() || null,
     approvalStatus: input.approvalStatus ?? 'pending',
-    rejectedReason: input.approvalStatus === 'rejected' ? input.rejectedReason ?? 'Rejected by admin' : null,
+    rejectedReason: input.approvalStatus === 'rejected' ? input.rejectedReason ?? 'Bị từ chối bởi quản trị viên' : null,
     archivedAt: null,
     vehiclePhoto: input.vehiclePhoto ?? null,
     driverPhoto: input.driverPhoto ?? null,
@@ -509,7 +509,7 @@ export async function authenticateAccount(username: string, password: string) {
 export async function updateCustomerProfile(userId: string, patch: Partial<CustomerRecord>) {
   const existing = await getCustomerByUserId(userId);
   if (!existing) {
-    throw new Error('Customer profile not found');
+    throw new Error('Không tìm thấy hồ sơ khách hàng');
   }
 
   const next: CustomerRecord = {
@@ -547,7 +547,7 @@ export async function updateCustomerProfile(userId: string, patch: Partial<Custo
 export async function updateDriverProfile(userId: string, patch: Partial<DriverProfileRecord>) {
   const existing = await getDriverByUserId(userId);
   if (!existing) {
-    throw new Error('Driver profile not found');
+    throw new Error('Không tìm thấy hồ sơ tài xế');
   }
 
   const next: DriverProfileRecord = {
@@ -617,7 +617,7 @@ export async function setDriverApproval(
 ) {
   return updateDriverProfile(userId, {
     approvalStatus,
-    rejectedReason: approvalStatus === 'rejected' ? rejectedReason ?? 'Rejected by admin' : null,
+    rejectedReason: approvalStatus === 'rejected' ? rejectedReason ?? 'Bị từ chối bởi quản trị viên' : null,
     active: approvalStatus === 'approved' ? true : false
   });
 }

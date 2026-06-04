@@ -8,7 +8,7 @@ export default async function DriverTripsPage() {
   const bookings = session?.role === 'driver' ? await getDriverDashboardBookings(session.userId) : [];
 
   return (
-    <SectionCard title="Driver workflow" description="Incoming bookings and completion actions.">
+    <SectionCard title="Quy trình tài xế" description="Các chuyến đến và thao tác hoàn thành.">
       <DriverBookingsBoard bookings={bookings} />
     </SectionCard>
   );

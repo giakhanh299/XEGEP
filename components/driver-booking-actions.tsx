@@ -4,9 +4,9 @@ import { useRouter } from 'next/navigation';
 import { BookingStatus } from '@/lib/types';
 
 const actions: Array<{ label: string; status: BookingStatus }> = [
-  { label: 'Accept', status: 'accepted' },
-  { label: 'Reject', status: 'cancelled' },
-  { label: 'Complete', status: 'completed' }
+  { label: 'Nhận chuyến', status: 'accepted' },
+  { label: 'Từ chối', status: 'cancelled' },
+  { label: 'Hoàn thành', status: 'completed' }
 ];
 
 export function DriverBookingActions({ bookingId }: { bookingId: string }) {

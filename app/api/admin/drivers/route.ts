@@ -14,7 +14,7 @@ import {
 export async function GET() {
   const session = await requireAdminApiSession();
   if (!session) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    return NextResponse.json({ error: 'Không có quyền truy cập' }, { status: 403 });
   }
 
   const drivers = await listAllDriversAdmin();
@@ -24,7 +24,7 @@ export async function GET() {
 export async function POST(request: Request) {
   const session = await requireAdminApiSession();
   if (!session) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    return NextResponse.json({ error: 'Không có quyền truy cập' }, { status: 403 });
   }
 
   try {
@@ -44,7 +44,7 @@ export async function POST(request: Request) {
       !validateNonEmpty(String(body.serviceArea ?? '')) ||
       !validateApprovalStatus(approvalStatus)
     ) {
-      return NextResponse.json({ error: 'Invalid driver payload' }, { status: 400 });
+      return NextResponse.json({ error: 'Dữ liệu tài xế không hợp lệ' }, { status: 400 });
     }
 
     const bundle = await registerAccount({
@@ -77,7 +77,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ driver: bundle.driver ?? null }, { status: 201 });
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unable to create driver';
+    const message = error instanceof Error ? error.message : 'Không thể tạo tài xế';
     const status = message.toLowerCase().includes('username already exists') ? 409 : 400;
     return NextResponse.json({ error: message }, { status });
   }

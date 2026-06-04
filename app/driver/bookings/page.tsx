@@ -10,16 +10,16 @@ export default async function DriverBookingsPage() {
 
   if (!session || session.role !== 'driver') {
     return (
-      <SectionCard title="Driver bookings" description="Sign in as a driver to manage incoming bookings.">
+      <SectionCard title="Chuyến của tài xế" description="Đăng nhập bằng tài khoản tài xế để xử lý các chuyến đến.">
         <Link href="/auth" className="inline-flex rounded-2xl bg-emerald-400 px-4 py-3 font-semibold text-slate-950">
-          Go to sign in
+          Đi đến đăng nhập
         </Link>
       </SectionCard>
     );
   }
 
   return (
-    <SectionCard title="Driver bookings" description="Accept, reject, or complete assigned rides.">
+    <SectionCard title="Chuyến của tài xế" description="Nhận, từ chối hoặc hoàn thành các chuyến được giao.">
       <DriverBookingsBoard bookings={bookings} />
     </SectionCard>
   );

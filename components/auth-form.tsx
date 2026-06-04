@@ -66,14 +66,14 @@ export function AuthForm() {
 
       const data = await response.json().catch(() => null);
       if (!response.ok) {
-        throw new Error(data?.error ?? 'Unable to complete authentication');
+        throw new Error(data?.error ?? 'Không thể hoàn tất xác thực');
       }
 
       const nextPath = data?.user?.role === 'driver' ? '/driver' : '/customer';
       router.push(nextPath);
       router.refresh();
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : 'Something went wrong');
+      setMessage(error instanceof Error ? error.message : 'Đã xảy ra lỗi');
     } finally {
       setIsSubmitting(false);
     }
@@ -91,7 +91,7 @@ export function AuthForm() {
               mode === item ? 'bg-emerald-400 text-slate-950' : 'bg-white/5 text-slate-200'
             }`}
           >
-            {item === 'login' ? 'Login' : 'Register'}
+            {item === 'login' ? 'Đăng nhập' : 'Đăng ký'}
           </button>
         ))}
       </div>
@@ -107,7 +107,7 @@ export function AuthForm() {
                 role === item ? 'bg-cyan-400 text-slate-950' : 'bg-white/5 text-slate-200'
               }`}
             >
-              {item === 'customer' ? 'Customer' : 'Driver'}
+              {item === 'customer' ? 'Khách hàng' : 'Tài xế'}
             </button>
           ))}
         </div>
@@ -116,7 +116,7 @@ export function AuthForm() {
       {mode === 'login' ? (
         <div className="grid gap-3">
           <label className="space-y-2 text-sm">
-            <span className="text-slate-200">Username</span>
+            <span className="text-slate-200">Tên đăng nhập</span>
             <input
               required
               value={loginForm.username}
@@ -125,7 +125,7 @@ export function AuthForm() {
             />
           </label>
           <label className="space-y-2 text-sm">
-            <span className="text-slate-200">Password</span>
+            <span className="text-slate-200">Mật khẩu</span>
             <input
               required
               type="password"
@@ -138,11 +138,11 @@ export function AuthForm() {
       ) : role === 'customer' ? (
         <div className="grid gap-3 sm:grid-cols-2">
           {[
-            ['username', 'Username'],
-            ['fullName', 'Full name'],
-            ['phone', 'Phone number'],
-            ['address', 'Address'],
-            ['password', 'Password']
+            ['username', 'Tên đăng nhập'],
+            ['fullName', 'Họ và tên'],
+            ['phone', 'Số điện thoại'],
+            ['address', 'Địa chỉ'],
+            ['password', 'Mật khẩu']
           ].map(([key, label]) => (
             <label key={key} className="space-y-2 text-sm sm:col-span-1">
               <span className="text-slate-200">{label}</span>
@@ -159,15 +159,15 @@ export function AuthForm() {
       ) : (
         <div className="grid gap-3 sm:grid-cols-2">
           {[
-            ['username', 'Username'],
-            ['driverName', 'Driver name'],
-            ['phone', 'Phone number'],
-            ['plateNumber', 'Plate number'],
-            ['serviceArea', 'Service area'],
-            ['vehiclePhoto', 'Vehicle photo URL'],
-            ['driverPhoto', 'Driver photo URL'],
-            ['description', 'Short description'],
-            ['password', 'Password']
+            ['username', 'Tên đăng nhập'],
+            ['driverName', 'Tên tài xế'],
+            ['phone', 'Số điện thoại'],
+            ['plateNumber', 'Biển số xe'],
+            ['serviceArea', 'Khu vực hoạt động'],
+            ['vehiclePhoto', 'URL ảnh xe'],
+            ['driverPhoto', 'URL ảnh tài xế'],
+            ['description', 'Mô tả ngắn'],
+            ['password', 'Mật khẩu']
           ].map(([key, label]) => (
             <label key={key} className="space-y-2 text-sm sm:col-span-1">
               <span className="text-slate-200">{label}</span>
@@ -181,18 +181,18 @@ export function AuthForm() {
             </label>
           ))}
           <label className="space-y-2 text-sm">
-            <span className="text-slate-200">Vehicle type</span>
+            <span className="text-slate-200">Loại xe</span>
             <select
               value={driverForm.vehicleType}
               onChange={(event) => setDriverForm((prev) => ({ ...prev, vehicleType: event.target.value }))}
               className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none focus:border-emerald-400/40"
             >
-              <option value="4-seat vehicle">4-seat vehicle</option>
-              <option value="7-seat vehicle">7-seat vehicle</option>
+              <option value="4-seat vehicle">Xe 4 chỗ</option>
+              <option value="7-seat vehicle">Xe 7 chỗ</option>
             </select>
           </label>
           <label className="space-y-2 text-sm">
-            <span className="text-slate-200">Seat count</span>
+            <span className="text-slate-200">Số ghế</span>
             <select
               value={driverForm.seatCount}
               onChange={(event) => setDriverForm((prev) => ({ ...prev, seatCount: event.target.value }))}
@@ -210,7 +210,7 @@ export function AuthForm() {
         disabled={isSubmitting}
         className="w-full rounded-2xl bg-emerald-400 px-5 py-3 font-semibold text-slate-950 transition hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-70"
       >
-        {isSubmitting ? 'Working...' : mode === 'login' ? 'Login' : role === 'customer' ? 'Create customer account' : 'Create driver account'}
+              {isSubmitting ? 'Đang xử lý...' : mode === 'login' ? 'Đăng nhập' : role === 'customer' ? 'Tạo tài khoản khách hàng' : 'Tạo tài khoản tài xế'}
       </button>
 
       {message ? <p className="text-sm text-slate-300">{message}</p> : null}

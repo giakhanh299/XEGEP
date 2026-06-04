@@ -13,20 +13,21 @@ export default async function AdminLayout({ children }: Readonly<{ children: Rea
 
   return (
     <RoleShell
-      role="Admin"
-      title="Admin console"
-      description="Dispatch, bookings, trips, drivers, and map operations."
+      role="Quản trị"
+      title="Bảng điều khiển quản trị"
+      description="Điều phối, chuyến đi, tài xế và bản đồ."
       notificationCount={notificationCount}
       mobileNav={[
-        { href: '/admin/dashboard', label: 'Dashboard' },
-        { href: '/admin/notifications', label: 'Notifications' },
-        { href: '/admin/ai-dispatch', label: 'AI Dispatch' },
-        { href: '/admin/bookings', label: 'Bookings' },
-        { href: '/admin/trips', label: 'Trips' },
-        { href: '/admin/payments', label: 'Payments' },
-        { href: '/admin/drivers', label: 'Drivers' },
-        { href: '/admin/vehicles', label: 'Vehicles' },
-        { href: '/admin/map', label: 'Map' }
+        { href: '/admin/dashboard', label: 'Bảng điều khiển' },
+        { href: '/admin/notifications', label: 'Thông báo' },
+        { href: '/admin/ai-dispatch', label: 'Điều phối AI' },
+        { href: '/admin/bookings', label: 'Chuyến đi' },
+        { href: '/shared-rides', label: 'Quản lý xe ghép' },
+        { href: '/admin/trips', label: 'Lượt chạy' },
+        { href: '/admin/payments', label: 'Thanh toán' },
+        { href: '/admin/drivers', label: 'Tài xế' },
+        { href: '/admin/vehicles', label: 'Xe' },
+        { href: '/admin/map', label: 'Bản đồ' }
       ]}
     >
       {children}

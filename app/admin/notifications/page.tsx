@@ -9,9 +9,9 @@ export default async function AdminNotificationsPage() {
   const unreadCount = await countUnreadNotifications({ userId: session.userId, role: session.role });
 
   return (
-    <SectionCard title="Notifications" description="Shared admin inbox for booking alerts and status changes.">
+    <SectionCard title="Thông báo" description="Hộp thư chung của quản trị cho các cảnh báo chuyến đi và thay đổi trạng thái.">
       <div className="mb-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-200">
-        Unread notifications: {unreadCount}
+        Thông báo chưa đọc: {unreadCount}
       </div>
       <NotificationInbox notifications={notifications} role={session.role} adminView />
     </SectionCard>

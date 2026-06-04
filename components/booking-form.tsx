@@ -64,6 +64,7 @@ export function BookingForm({
   const eligibleDrivers = drivers.filter((driver) => driver.availableSeats >= passengerCount);
   const eligibleSelectedDriver = selectedDriver && selectedDriver.availableSeats >= passengerCount ? selectedDriver : null;
   const effectiveDriver = eligibleSelectedDriver ?? eligibleDrivers[0] ?? null;
+  const remainingSeats = effectiveDriver?.availableSeats ?? 0;
   const vehicleType = effectiveDriver?.vehicleType ?? '4-seat vehicle';
   const vehicleMultiplier = getVehicleMultiplier(vehicleType);
   const estimatedDistanceKm = parsePositiveNumber(form.estimatedDistanceKm);
@@ -99,6 +100,16 @@ export function BookingForm({
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!effectiveDriver) {
+      setMessage(`Không còn xe ghép nào đủ ${passengerCount} ghế.`);
+      return;
+    }
+
+    if (passengerCount > remainingSeats) {
+      setMessage(`Xe đã chọn chỉ còn ${remainingSeats} ghế trống.`);
+      return;
+    }
+
     setIsSubmitting(true);
     setMessage(null);
     setBookingId(null);
@@ -118,15 +129,15 @@ export function BookingForm({
 
       if (!response.ok) {
         const payload = await response.json().catch(() => null);
-        throw new Error(payload?.error ?? 'Unable to create booking');
+        throw new Error(payload?.error ?? 'Không thể tạo chuyến đi');
       }
 
       const payload = await response.json().catch(() => null);
       setBookingId(payload?.booking?.id ?? null);
-      setMessage('Booking submitted. The driver can now accept or reject it.');
+      setMessage('Đã gửi chuyến đi. Tài xế có thể nhận hoặc từ chối chuyến này.');
       setForm({ ...initial, driverId: selectedDriverId ?? '', passengerCount: '1' });
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : 'Something went wrong');
+      setMessage(error instanceof Error ? error.message : 'Đã xảy ra lỗi');
     } finally {
       setIsSubmitting(false);
     }
@@ -136,8 +147,8 @@ export function BookingForm({
     <form onSubmit={handleSubmit} className="glass space-y-4 rounded-[1.75rem] p-5">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-lg font-semibold text-white">New booking</p>
-          <p className="text-sm text-slate-400">Customer details load from your account automatically.</p>
+          <p className="text-lg font-semibold text-white">Đặt chuyến mới</p>
+          <p className="text-sm text-slate-400">Thông tin khách hàng sẽ được lấy tự động từ tài khoản của bạn.</p>
         </div>
         {customer ? (
           <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-right text-xs text-slate-300">
@@ -149,10 +160,10 @@ export function BookingForm({
 
       {!customer ? (
         <div className="rounded-2xl border border-amber-400/20 bg-amber-400/10 p-4 text-sm text-amber-100">
-          Please sign in as a customer before booking a ride.
+          Vui lòng đăng nhập bằng tài khoản khách hàng trước khi đặt xe.
           <div className="mt-3">
             <Link href="/auth" className="inline-flex rounded-2xl bg-amber-300 px-4 py-2 font-semibold text-slate-950">
-              Go to login
+              Đi đến đăng nhập
             </Link>
           </div>
         </div>
@@ -160,27 +171,27 @@ export function BookingForm({
 
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="space-y-2 text-sm sm:col-span-2">
-          <span className="text-slate-200">Driver / Vehicle</span>
+          <span className="text-slate-200">Tài xế / Xe</span>
           <select
             value={form.driverId}
             onChange={(event) => update('driverId', event.target.value)}
             className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none ring-0 focus:border-emerald-400/40"
           >
-            <option value="">Any available driver</option>
+            <option value="">Bất kỳ tài xế còn trống nào</option>
             {eligibleDrivers.map((driver) => (
               <option key={driver.id} value={driver.id}>
-                {driver.driverName} - {driver.vehicleType} - {driver.plateNumber} - {driver.availableSeats} seats left
+                {driver.driverName} - {driver.vehicleType} - {driver.plateNumber} - còn {driver.availableSeats} chỗ
               </option>
             ))}
           </select>
           <p className="text-xs text-slate-400">
             {eligibleDrivers.length > 0
-              ? `${eligibleDrivers.length} vehicle${eligibleDrivers.length === 1 ? '' : 's'} can handle ${passengerCount} seat${passengerCount === 1 ? '' : 's'}.`
-              : `No available vehicles can handle ${passengerCount} seats right now.`}
+              ? `${eligibleDrivers.length} xe có thể chở ${passengerCount} ghế.`
+              : `Hiện không có xe nào đáp ứng ${passengerCount} ghế.`}
           </p>
         </label>
         <label className="space-y-2 text-sm">
-          <span className="text-slate-200">Seats / passengers</span>
+          <span className="text-slate-200">Số ghế / hành khách</span>
           <input
             required
             type="number"
@@ -193,7 +204,7 @@ export function BookingForm({
           />
         </label>
         <label className="space-y-2 text-sm">
-          <span className="text-slate-200">Pickup location</span>
+          <span className="text-slate-200">Điểm đón</span>
           <input
             required
             value={form.pickupLocation}
@@ -202,7 +213,7 @@ export function BookingForm({
           />
         </label>
         <label className="space-y-2 text-sm">
-          <span className="text-slate-200">Destination</span>
+          <span className="text-slate-200">Điểm đến</span>
           <input
             required
             value={form.dropoffLocation}
@@ -211,7 +222,7 @@ export function BookingForm({
           />
         </label>
         <label className="space-y-2 text-sm">
-          <span className="text-slate-200">Distance (km)</span>
+          <span className="text-slate-200">Khoảng cách (km)</span>
           <input
             required
             type="number"
@@ -223,7 +234,7 @@ export function BookingForm({
           />
         </label>
         <label className="space-y-2 text-sm">
-          <span className="text-slate-200">Base fare</span>
+          <span className="text-slate-200">Giá mở cửa</span>
           <input
             required
             type="number"
@@ -235,7 +246,7 @@ export function BookingForm({
           />
         </label>
         <label className="space-y-2 text-sm">
-          <span className="text-slate-200">Price per km</span>
+          <span className="text-slate-200">Giá mỗi km</span>
           <input
             required
             type="number"
@@ -247,7 +258,7 @@ export function BookingForm({
           />
         </label>
         <label className="space-y-2 text-sm sm:col-span-2">
-          <span className="text-slate-200">Travel date and time</span>
+          <span className="text-slate-200">Ngày và giờ đi</span>
           <input
             required
             type="datetime-local"
@@ -257,7 +268,7 @@ export function BookingForm({
           />
         </label>
         <label className="space-y-2 text-sm sm:col-span-2">
-          <span className="text-slate-200">Notes</span>
+          <span className="text-slate-200">Ghi chú</span>
           <textarea
             rows={4}
             value={form.notes}
@@ -268,30 +279,38 @@ export function BookingForm({
       </div>
 
       <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-        <p className="text-sm uppercase tracking-[0.2em] text-emerald-300">Fare estimate</p>
+        <p className="text-sm uppercase tracking-[0.2em] text-emerald-300">Ước tính giá</p>
         <div className="mt-3 grid gap-2 text-sm text-slate-300 sm:grid-cols-2">
           <p>
-            <strong className="text-white">Vehicle type:</strong> {vehicleType}
+            <strong className="text-white">Loại xe:</strong> {vehicleType}
           </p>
           <p>
-            <strong className="text-white">Multiplier:</strong> {vehicleMultiplier.toFixed(2)}x
+            <strong className="text-white">Hệ số:</strong> {vehicleMultiplier.toFixed(2)}x
           </p>
           <p>
-            <strong className="text-white">Distance:</strong> {estimatedDistanceKm ?? 'N/A'} km
+            <strong className="text-white">Khoảng cách:</strong> {estimatedDistanceKm ?? 'N/A'} km
           </p>
           <p>
-            <strong className="text-white">Seats:</strong> {passengerCount}
+            <strong className="text-white">Số ghế:</strong> {passengerCount}
           </p>
           <p>
-            <strong className="text-white">Estimated fare:</strong> {estimatedPrice ? `${estimatedPrice.toLocaleString()} VND` : 'Enter fare inputs'}
+            <strong className="text-white">Ghế còn lại:</strong> {remainingSeats}
+          </p>
+          <p>
+            <strong className="text-white">Giá ước tính:</strong> {estimatedPrice ? `${estimatedPrice.toLocaleString()} VND` : 'Nhập thông số giá'}
           </p>
           {eligibleSelectedDriver ? (
             <p className="sm:col-span-2 text-emerald-200">
-              Selected vehicle has {eligibleSelectedDriver.availableSeats} seats remaining.
+              Xe đã chọn còn {eligibleSelectedDriver.availableSeats} chỗ.
             </p>
           ) : form.driverId ? (
-            <p className="sm:col-span-2 text-amber-200">
-              Selected vehicle does not have enough seats for this booking.
+          <p className="sm:col-span-2 text-amber-200">
+              Xe đã chọn không đủ chỗ cho chuyến này.
+            </p>
+          ) : null}
+          {eligibleDrivers.length === 0 ? (
+            <p className="sm:col-span-2 text-rose-200">
+              Không còn xe ghép nào đủ {passengerCount} ghế.
             </p>
           ) : null}
         </div>
@@ -308,14 +327,14 @@ export function BookingForm({
         }
         className="w-full rounded-2xl bg-emerald-400 px-5 py-3 font-semibold text-slate-950 transition hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-70"
       >
-        {isSubmitting ? 'Submitting...' : 'Book now'}
-      </button>
-      {message ? <p className="text-sm text-slate-300">{message}</p> : null}
-      {bookingId ? (
-        <Link href={`/customer/my-trips/${bookingId}`} className="inline-flex text-sm font-semibold text-emerald-300">
-          View booking details
-        </Link>
-      ) : null}
+          {isSubmitting ? 'Đang gửi...' : 'Đặt xe ngay'}
+        </button>
+        {message ? <p className="text-sm text-slate-300">{message}</p> : null}
+        {bookingId ? (
+          <Link href={`/customer/my-trips/${bookingId}`} className="inline-flex text-sm font-semibold text-emerald-300">
+          Xem chi tiết chuyến đi
+          </Link>
+        ) : null}
     </form>
   );
 }

@@ -11,7 +11,7 @@ export default async function CustomerHomePage() {
 
   return (
     <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
-      <SectionCard title="Current booking" description="Your latest ride request.">
+      <SectionCard title="Chuyến hiện tại" description="Yêu cầu xe gần nhất của bạn.">
         <div className="space-y-4">
           {bookings[0] ? (
             <>
@@ -23,45 +23,45 @@ export default async function CustomerHomePage() {
               </div>
               <div className="space-y-2 text-sm text-slate-200">
                 <p>
-                  <strong className="text-white">From:</strong> {bookings[0].pickupLocation}
+                  <strong className="text-white">Từ:</strong> {bookings[0].pickupLocation}
                 </p>
                 <p>
-                  <strong className="text-white">To:</strong> {bookings[0].dropoffLocation}
+                  <strong className="text-white">Đến:</strong> {bookings[0].dropoffLocation}
                 </p>
                 <p>
-                  <strong className="text-white">Driver:</strong> {bookings[0].driverSnapshot?.driverName ?? 'Pending assignment'}
+                  <strong className="text-white">Tài xế:</strong> {bookings[0].driverSnapshot?.driverName ?? 'Đang chờ phân công'}
                 </p>
                 <p>
-                  <strong className="text-white">Estimated fare:</strong>{' '}
-                  {bookings[0].estimatedFare ? `${bookings[0].estimatedFare.toLocaleString()} VND` : 'N/A'}
+                  <strong className="text-white">Giá ước tính:</strong>{' '}
+                  {bookings[0].estimatedFare ? `${bookings[0].estimatedFare.toLocaleString()} VND` : 'Không có'}
                 </p>
               </div>
             </>
           ) : (
-            <p className="text-sm text-slate-300">No active bookings yet.</p>
+            <p className="text-sm text-slate-300">Bạn chưa có chuyến nào đang hoạt động.</p>
           )}
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-slate-300">
-            Browse vehicles, review booking history, and keep your profile synced for faster checkout.
+            Xem xe, kiểm tra lịch sử chuyến đi và cập nhật hồ sơ để đặt xe nhanh hơn.
           </div>
           <Link href="/customer/book" className="inline-flex rounded-2xl bg-emerald-400 px-4 py-3 font-semibold text-slate-950">
-            Book another ride
+            Đặt chuyến khác
           </Link>
         </div>
       </SectionCard>
 
       <div className="space-y-4">
         <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-          <StatCard label="Total Bookings" value={String(bookings.length)} detail="All ride requests in your history." />
-          <StatCard label="Active Bookings" value={String(activeBookings.length)} detail="Pending or in-progress trips." />
-          <StatCard label="Signed In" value={session?.username ?? 'Guest'} detail="Loaded from your session cookie." />
+          <StatCard label="Tổng chuyến" value={String(bookings.length)} detail="Tất cả yêu cầu xe trong lịch sử." />
+          <StatCard label="Chuyến đang hoạt động" value={String(activeBookings.length)} detail="Các chuyến chờ xử lý hoặc đang chạy." />
+          <StatCard label="Đã đăng nhập" value={session?.username ?? 'Khách'} detail="Lấy từ cookie phiên đăng nhập." />
         </div>
-        <SectionCard title="Quick actions" description="Common customer actions.">
+        <SectionCard title="Thao tác nhanh" description="Các thao tác thường dùng cho khách hàng.">
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
             <Link href="/vehicles" className="rounded-2xl border border-white/10 bg-white/5 p-4">
-              Browse vehicles
+              Xem xe
             </Link>
             <Link href="/customer/my-trips" className="rounded-2xl border border-white/10 bg-white/5 p-4">
-              Review my trips
+              Xem chuyến đi của tôi
             </Link>
           </div>
         </SectionCard>

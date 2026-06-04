@@ -10,9 +10,9 @@ export default async function CustomerTripsPage() {
   const bookings = session?.role === 'customer' ? await getCustomerDashboardBookings(session.userId) : [];
 
   return (
-    <SectionCard title="My trips" description="Recent and active shared rides.">
-      <div className="space-y-3">
-        {bookings.length === 0 ? <p className="text-sm text-slate-300">No bookings yet.</p> : null}
+      <SectionCard title="Chuyến đi của tôi" description="Các chuyến xe gần đây và đang hoạt động.">
+        <div className="space-y-3">
+        {bookings.length === 0 ? <p className="text-sm text-slate-300">Bạn chưa có chuyến nào.</p> : null}
         {bookings.map((booking) => {
           const latestUpdate = getLatestBookingStatusLabel(booking);
 
@@ -25,24 +25,24 @@ export default async function CustomerTripsPage() {
                 </p>
                 <p className="text-sm text-slate-400">{booking.bookingTime ?? booking.createdAt}</p>
                 <p className="text-xs text-slate-500">
-                  Estimated fare: {booking.estimatedFare ? `${booking.estimatedFare.toLocaleString()} VND` : 'N/A'}
+                  Giá ước tính: {booking.estimatedFare ? `${booking.estimatedFare.toLocaleString()} VND` : 'Không có'}
                 </p>
               </div>
                 <StatusBadge status={booking.status} />
               </div>
               <div className="mt-3 grid gap-2 text-sm text-slate-300 sm:grid-cols-2">
                 <p>
-                  <strong className="text-white">Phone:</strong> {booking.phone}
+                  <strong className="text-white">Điện thoại:</strong> {booking.phone}
                 </p>
                 <p>
-                  <strong className="text-white">Driver:</strong> {booking.driverSnapshot?.driverName ?? 'Pending assignment'}
+                  <strong className="text-white">Tài xế:</strong> {booking.driverSnapshot?.driverName ?? 'Đang chờ phân công'}
                 </p>
                 <p className="sm:col-span-2">
-                  <strong className="text-white">Latest update:</strong> {latestUpdate.status} at {latestUpdate.timestamp}
+                  <strong className="text-white">Cập nhật gần nhất:</strong> {latestUpdate.status} lúc {latestUpdate.timestamp}
                 </p>
               </div>
               <Link href={`/customer/my-trips/${booking.id}`} className="mt-4 inline-flex text-sm font-semibold text-emerald-300">
-                View trip details
+                Xem chi tiết chuyến đi
               </Link>
             </div>
           );

@@ -60,7 +60,7 @@ export function AdminDriverCreateForm() {
     });
     const data = await response.json().catch(() => null);
     if (!response.ok) {
-      throw new Error(data?.error ?? 'Upload failed');
+      throw new Error(data?.error ?? 'Tải ảnh thất bại');
     }
 
     return String(data.url ?? '');
@@ -97,7 +97,7 @@ export function AdminDriverCreateForm() {
         } else {
           setPreviewVehiclePhoto(previousUrl);
         }
-        setMessage(error instanceof Error ? error.message : 'Upload failed');
+        setMessage(error instanceof Error ? error.message : 'Tải ảnh thất bại');
       } finally {
         URL.revokeObjectURL(previewUrl);
         setUploading((current) => (current === kind ? null : current));
@@ -136,17 +136,17 @@ export function AdminDriverCreateForm() {
       });
       const data = await response.json().catch(() => null);
       if (!response.ok) {
-        throw new Error(data?.error ?? 'Unable to create driver');
+        throw new Error(data?.error ?? 'Không thể tạo tài xế');
       }
 
       setForm(initialFormState);
       setPreviewDriverPhoto('');
       setPreviewVehiclePhoto('');
-      setMessage('Driver created successfully.');
+      setMessage('Đã tạo tài xế thành công.');
       router.push('/admin/drivers');
       router.refresh();
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : 'Unable to create driver');
+      setMessage(error instanceof Error ? error.message : 'Không thể tạo tài xế');
     } finally {
       setSubmitting(false);
     }
@@ -159,7 +159,7 @@ export function AdminDriverCreateForm() {
     <form onSubmit={handleSubmit} className="space-y-5">
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-2 text-sm">
-          <span className="text-slate-200">Username</span>
+          <span className="text-slate-200">Tên đăng nhập</span>
           <input
             required
             value={form.username}
@@ -168,7 +168,7 @@ export function AdminDriverCreateForm() {
           />
         </label>
         <label className="space-y-2 text-sm">
-          <span className="text-slate-200">Password</span>
+          <span className="text-slate-200">Mật khẩu</span>
           <input
             required
             type="password"
@@ -178,7 +178,7 @@ export function AdminDriverCreateForm() {
           />
         </label>
         <label className="space-y-2 text-sm">
-          <span className="text-slate-200">Driver name</span>
+          <span className="text-slate-200">Tên tài xế</span>
           <input
             required
             value={form.driverName}
@@ -187,7 +187,7 @@ export function AdminDriverCreateForm() {
           />
         </label>
         <label className="space-y-2 text-sm">
-          <span className="text-slate-200">Phone</span>
+          <span className="text-slate-200">Số điện thoại</span>
           <input
             required
             value={form.phone}
@@ -196,18 +196,18 @@ export function AdminDriverCreateForm() {
           />
         </label>
         <label className="space-y-2 text-sm">
-          <span className="text-slate-200">Vehicle type</span>
+          <span className="text-slate-200">Loại xe</span>
           <select
             value={form.vehicleType}
             onChange={(event) => updateField('vehicleType', event.target.value as FormState['vehicleType'])}
             className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none"
           >
-            <option value="4-seat vehicle">4-seat vehicle</option>
-            <option value="7-seat vehicle">7-seat vehicle</option>
+            <option value="4-seat vehicle">Xe 4 chỗ</option>
+            <option value="7-seat vehicle">Xe 7 chỗ</option>
           </select>
         </label>
         <label className="space-y-2 text-sm">
-          <span className="text-slate-200">Seat count</span>
+          <span className="text-slate-200">Số ghế</span>
           <select
             value={String(form.seatCount)}
             onChange={(event) => updateField('seatCount', Number(event.target.value) as 4 | 7)}
@@ -218,7 +218,7 @@ export function AdminDriverCreateForm() {
           </select>
         </label>
         <label className="space-y-2 text-sm">
-          <span className="text-slate-200">Plate number</span>
+          <span className="text-slate-200">Biển số xe</span>
           <input
             required
             value={form.plateNumber}
@@ -227,7 +227,7 @@ export function AdminDriverCreateForm() {
           />
         </label>
         <label className="space-y-2 text-sm">
-          <span className="text-slate-200">Service area</span>
+          <span className="text-slate-200">Khu vực hoạt động</span>
           <input
             required
             value={form.serviceArea}
@@ -236,7 +236,7 @@ export function AdminDriverCreateForm() {
           />
         </label>
         <label className="space-y-2 text-sm">
-          <span className="text-slate-200">Approval status</span>
+          <span className="text-slate-200">Trạng thái duyệt</span>
           <select
             value={form.approvalStatus}
             onChange={(event) =>
@@ -244,15 +244,15 @@ export function AdminDriverCreateForm() {
             }
             className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none"
           >
-            <option value="pending">Pending</option>
-            <option value="approved">Approved</option>
-            <option value="rejected">Rejected</option>
+            <option value="pending">Chờ xử lý</option>
+            <option value="approved">Đã duyệt</option>
+            <option value="rejected">Bị từ chối</option>
           </select>
         </label>
       </div>
 
       <label className="space-y-2 text-sm">
-        <span className="text-slate-200">Description</span>
+        <span className="text-slate-200">Mô tả</span>
         <textarea
           rows={4}
           value={form.description}
@@ -268,17 +268,17 @@ export function AdminDriverCreateForm() {
           onChange={(event) => updateField('active', event.target.checked)}
           className="h-4 w-4 rounded border-white/20 bg-slate-950/50 text-emerald-400"
         />
-        Active
+        Đang hoạt động
       </label>
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-3">
-          <p className="text-sm font-medium text-slate-200">Driver photo</p>
+          <p className="text-sm font-medium text-slate-200">Ảnh tài xế</p>
           <div className="overflow-hidden rounded-2xl border border-white/10 bg-slate-950/50">
             {driverPreview ? (
               <img src={driverPreview} alt="Driver preview" className="h-56 w-full object-cover" />
             ) : (
-              <div className="flex h-56 items-center justify-center text-sm text-slate-400">No driver photo</div>
+              <div className="flex h-56 items-center justify-center text-sm text-slate-400">Chưa có ảnh tài xế</div>
             )}
           </div>
           <input
@@ -290,12 +290,12 @@ export function AdminDriverCreateForm() {
         </div>
 
         <div className="space-y-3">
-          <p className="text-sm font-medium text-slate-200">Vehicle photo</p>
+          <p className="text-sm font-medium text-slate-200">Ảnh xe</p>
           <div className="overflow-hidden rounded-2xl border border-white/10 bg-slate-950/50">
             {vehiclePreview ? (
               <img src={vehiclePreview} alt="Vehicle preview" className="h-56 w-full object-cover" />
             ) : (
-              <div className="flex h-56 items-center justify-center text-sm text-slate-400">No vehicle photo</div>
+              <div className="flex h-56 items-center justify-center text-sm text-slate-400">Chưa có ảnh xe</div>
             )}
           </div>
           <input
@@ -313,9 +313,9 @@ export function AdminDriverCreateForm() {
           disabled={submitting || uploading !== null}
           className="rounded-2xl bg-emerald-400 px-5 py-3 text-sm font-semibold text-slate-950 disabled:opacity-60"
         >
-          {submitting ? 'Creating...' : 'Create driver'}
+          {submitting ? 'Đang tạo...' : 'Tạo tài xế'}
         </button>
-        {uploading ? <p className="text-sm text-slate-400">Uploading {uploading} photo...</p> : null}
+        {uploading ? <p className="text-sm text-slate-400">Đang tải ảnh {uploading}...</p> : null}
       </div>
 
       {message ? <p className="text-sm text-slate-300">{message}</p> : null}

@@ -21,21 +21,21 @@ function statusClass(status: DriverProfileRecord['approvalStatus']) {
 }
 
 function statusLabel(status: DriverProfileRecord['approvalStatus']) {
-  return status === 'pending' ? 'Pending' : status === 'approved' ? 'Approved' : 'Rejected';
+  return status === 'pending' ? 'Chờ xử lý' : status === 'approved' ? 'Đã duyệt' : 'Bị từ chối';
 }
 
 function actionLabel(action: 'approve' | 'reject' | 'activate' | 'deactivate' | 'archive') {
   switch (action) {
     case 'approve':
-      return 'approved';
+      return 'đã duyệt';
     case 'reject':
-      return 'rejected';
+      return 'bị từ chối';
     case 'activate':
-      return 'activated';
+      return 'đã kích hoạt';
     case 'deactivate':
-      return 'deactivated';
+      return 'đã tắt';
     case 'archive':
-      return 'archived';
+      return 'đã lưu trữ';
   }
 }
 
@@ -80,7 +80,7 @@ export function AdminDriverManagement({ drivers }: { drivers: DriverProfileRecor
     const response = await fetch('/api/uploads', { method: 'POST', body: formData });
     const data = await response.json().catch(() => null);
     if (!response.ok) {
-      throw new Error(data?.error ?? 'Upload failed');
+      throw new Error(data?.error ?? 'Tải ảnh thất bại');
     }
     return String(data.url ?? '');
   }
@@ -96,15 +96,15 @@ export function AdminDriverManagement({ drivers }: { drivers: DriverProfileRecor
       });
       const data = await response.json().catch(() => null);
       if (!response.ok) {
-        throw new Error(data?.error ?? 'Unable to update driver');
+        throw new Error(data?.error ?? 'Không thể cập nhật tài xế');
       }
       setRows((current) =>
         current.map((row) => (row.userId === id ? { ...row, ...data.driver, pendingVehicleUrl: '', pendingDriverUrl: '' } : row))
       );
       router.refresh();
-      setMessage('Driver updated.');
+      setMessage('Đã cập nhật tài xế.');
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : 'Unable to update driver');
+      setMessage(error instanceof Error ? error.message : 'Không thể cập nhật tài xế');
     } finally {
       setBusyId(null);
     }
@@ -125,15 +125,15 @@ export function AdminDriverManagement({ drivers }: { drivers: DriverProfileRecor
       });
       const data = await response.json().catch(() => null);
       if (!response.ok) {
-        throw new Error(data?.error ?? 'Unable to update driver');
+        throw new Error(data?.error ?? 'Không thể cập nhật tài xế');
       }
       setRows((current) =>
         current.map((row) => (row.userId === id ? { ...row, ...data.driver, pendingVehicleUrl: '', pendingDriverUrl: '' } : row))
       );
       router.refresh();
-      setMessage(`Driver ${actionLabel(action)}.`);
+      setMessage(`Tài xế ${actionLabel(action)}.`);
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : 'Action failed');
+      setMessage(error instanceof Error ? error.message : 'Thao tác thất bại');
     } finally {
       setBusyId(null);
     }
@@ -157,7 +157,7 @@ export function AdminDriverManagement({ drivers }: { drivers: DriverProfileRecor
         const url = await uploadImage(file, kind);
         updateLocalRow(id, kind === 'driver' ? { driverPhoto: url } : { vehiclePhoto: url });
       } catch (error) {
-        setMessage(error instanceof Error ? error.message : 'Upload failed');
+        setMessage(error instanceof Error ? error.message : 'Tải ảnh thất bại');
         updateLocalRow(
           id,
           kind === 'driver'
@@ -175,19 +175,19 @@ export function AdminDriverManagement({ drivers }: { drivers: DriverProfileRecor
     <div className="space-y-4">
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-          <p className="text-sm text-slate-400">Total drivers</p>
+          <p className="text-sm text-slate-400">Tổng tài xế</p>
           <p className="mt-2 text-3xl font-black text-white">{stats.total}</p>
         </div>
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-          <p className="text-sm text-slate-400">Pending</p>
+          <p className="text-sm text-slate-400">Chờ xử lý</p>
           <p className="mt-2 text-3xl font-black text-amber-200">{stats.pending}</p>
         </div>
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-          <p className="text-sm text-slate-400">Approved</p>
+          <p className="text-sm text-slate-400">Đã duyệt</p>
           <p className="mt-2 text-3xl font-black text-emerald-200">{stats.approved}</p>
         </div>
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-          <p className="text-sm text-slate-400">Rejected</p>
+          <p className="text-sm text-slate-400">Bị từ chối</p>
           <p className="mt-2 text-3xl font-black text-rose-200">{stats.rejected}</p>
         </div>
       </div>
@@ -207,7 +207,7 @@ export function AdminDriverManagement({ drivers }: { drivers: DriverProfileRecor
                   {statusLabel(driver.approvalStatus)}
                 </span>
                 <span className={`rounded-full px-3 py-1 text-xs font-semibold ${activeClass(driver.active)}`}>
-                  {driver.active ? 'Active' : 'Inactive'}
+                  {driver.active ? 'Đang hoạt động' : 'Không hoạt động'}
                 </span>
               </div>
             </div>
@@ -221,7 +221,7 @@ export function AdminDriverManagement({ drivers }: { drivers: DriverProfileRecor
                     className="h-40 w-full object-cover"
                   />
                 ) : (
-                  <div className="flex h-40 items-center justify-center text-sm text-slate-400">No driver image</div>
+                  <div className="flex h-40 items-center justify-center text-sm text-slate-400">Chưa có ảnh tài xế</div>
                 )}
               </div>
               <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/5">
@@ -232,14 +232,14 @@ export function AdminDriverManagement({ drivers }: { drivers: DriverProfileRecor
                     className="h-40 w-full object-cover"
                   />
                 ) : (
-                  <div className="flex h-40 items-center justify-center text-sm text-slate-400">No vehicle image</div>
+                  <div className="flex h-40 items-center justify-center text-sm text-slate-400">Chưa có ảnh xe</div>
                 )}
               </div>
             </div>
 
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <label className="space-y-2 text-sm">
-                <span className="text-slate-200">Driver name</span>
+                <span className="text-slate-200">Tên tài xế</span>
                 <input
                   value={driver.driverName}
                   onChange={(event) => updateLocalRow(driver.userId, { driverName: event.target.value })}
@@ -247,7 +247,7 @@ export function AdminDriverManagement({ drivers }: { drivers: DriverProfileRecor
                 />
               </label>
               <label className="space-y-2 text-sm">
-                <span className="text-slate-200">Phone</span>
+                <span className="text-slate-200">Số điện thoại</span>
                 <input
                   value={driver.phone}
                   onChange={(event) => updateLocalRow(driver.userId, { phone: event.target.value })}
@@ -255,7 +255,7 @@ export function AdminDriverManagement({ drivers }: { drivers: DriverProfileRecor
                 />
               </label>
               <label className="space-y-2 text-sm">
-                <span className="text-slate-200">Vehicle type</span>
+                <span className="text-slate-200">Loại xe</span>
                 <select
                   value={driver.vehicleType}
                   onChange={(event) =>
@@ -265,12 +265,12 @@ export function AdminDriverManagement({ drivers }: { drivers: DriverProfileRecor
                   }
                   className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none"
                 >
-                  <option value="4-seat vehicle">4-seat vehicle</option>
-                  <option value="7-seat vehicle">7-seat vehicle</option>
+                  <option value="4-seat vehicle">Xe 4 chỗ</option>
+                  <option value="7-seat vehicle">Xe 7 chỗ</option>
                 </select>
               </label>
               <label className="space-y-2 text-sm">
-                <span className="text-slate-200">Plate number</span>
+                <span className="text-slate-200">Biển số xe</span>
                 <input
                   value={driver.plateNumber}
                   onChange={(event) => updateLocalRow(driver.userId, { plateNumber: event.target.value })}
@@ -278,7 +278,7 @@ export function AdminDriverManagement({ drivers }: { drivers: DriverProfileRecor
                 />
               </label>
               <label className="space-y-2 text-sm">
-                <span className="text-slate-200">Seat count</span>
+                <span className="text-slate-200">Số ghế</span>
                 <select
                   value={String(driver.seatCount)}
                   onChange={(event) =>
@@ -291,7 +291,7 @@ export function AdminDriverManagement({ drivers }: { drivers: DriverProfileRecor
                 </select>
               </label>
               <label className="space-y-2 text-sm">
-                <span className="text-slate-200">Service area</span>
+                <span className="text-slate-200">Khu vực hoạt động</span>
                 <input
                   value={driver.serviceArea}
                   onChange={(event) => updateLocalRow(driver.userId, { serviceArea: event.target.value })}
@@ -299,7 +299,7 @@ export function AdminDriverManagement({ drivers }: { drivers: DriverProfileRecor
                 />
               </label>
               <label className="space-y-2 text-sm sm:col-span-2">
-                <span className="text-slate-200">Rejected reason</span>
+                <span className="text-slate-200">Lý do từ chối</span>
                 <input
                   value={driver.rejectedReason ?? ''}
                   onChange={(event) => updateLocalRow(driver.userId, { rejectedReason: event.target.value })}
@@ -307,7 +307,7 @@ export function AdminDriverManagement({ drivers }: { drivers: DriverProfileRecor
                 />
               </label>
               <label className="space-y-2 text-sm sm:col-span-2">
-                <span className="text-slate-200">Vehicle photo URL</span>
+                <span className="text-slate-200">URL ảnh xe</span>
                 <input
                   value={driver.vehiclePhoto ?? ''}
                   onChange={(event) => updateLocalRow(driver.userId, { vehiclePhoto: event.target.value })}
@@ -315,7 +315,7 @@ export function AdminDriverManagement({ drivers }: { drivers: DriverProfileRecor
                 />
               </label>
               <label className="space-y-2 text-sm sm:col-span-2">
-                <span className="text-slate-200">Driver photo URL</span>
+                <span className="text-slate-200">URL ảnh tài xế</span>
                 <input
                   value={driver.driverPhoto ?? ''}
                   onChange={(event) => updateLocalRow(driver.userId, { driverPhoto: event.target.value })}
@@ -323,7 +323,7 @@ export function AdminDriverManagement({ drivers }: { drivers: DriverProfileRecor
                 />
               </label>
               <label className="space-y-2 text-sm sm:col-span-2">
-                <span className="text-slate-200">Description</span>
+                <span className="text-slate-200">Mô tả</span>
                 <textarea
                   rows={3}
                   value={driver.description ?? ''}
@@ -335,7 +335,7 @@ export function AdminDriverManagement({ drivers }: { drivers: DriverProfileRecor
 
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <label className="space-y-2 text-sm">
-                <span className="text-slate-200">Upload vehicle photo</span>
+                <span className="text-slate-200">Tải ảnh xe lên</span>
                 <input
                   type="file"
                   accept="image/jpeg,image/png,image/webp"
@@ -344,7 +344,7 @@ export function AdminDriverManagement({ drivers }: { drivers: DriverProfileRecor
                 />
               </label>
               <label className="space-y-2 text-sm">
-                <span className="text-slate-200">Upload driver photo</span>
+                <span className="text-slate-200">Tải ảnh tài xế lên</span>
                 <input
                   type="file"
                   accept="image/jpeg,image/png,image/webp"
@@ -376,7 +376,7 @@ export function AdminDriverManagement({ drivers }: { drivers: DriverProfileRecor
                 }
                 className="rounded-2xl bg-emerald-400 px-4 py-2 text-sm font-semibold text-slate-950 disabled:opacity-60"
               >
-                {busyId === driver.userId ? 'Saving...' : 'Save changes'}
+                {busyId === driver.userId ? 'Đang lưu...' : 'Lưu thay đổi'}
               </button>
               <button
                 type="button"
@@ -384,15 +384,15 @@ export function AdminDriverManagement({ drivers }: { drivers: DriverProfileRecor
                 onClick={() => performAction(driver.userId, 'approve')}
                 className="rounded-2xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-2 text-sm font-medium text-emerald-100 disabled:opacity-60"
               >
-                Approve
+                Duyệt
               </button>
               <button
                 type="button"
                 disabled={busyId === driver.userId}
-                onClick={() => performAction(driver.userId, 'reject', driver.rejectedReason ?? 'Rejected by admin')}
+                onClick={() => performAction(driver.userId, 'reject', driver.rejectedReason ?? 'Bị từ chối bởi quản trị viên')}
                 className="rounded-2xl border border-rose-400/30 bg-rose-400/10 px-4 py-2 text-sm font-medium text-rose-100 disabled:opacity-60"
               >
-                Reject
+                Từ chối
               </button>
               <button
                 type="button"
@@ -400,7 +400,7 @@ export function AdminDriverManagement({ drivers }: { drivers: DriverProfileRecor
                 onClick={() => performAction(driver.userId, driver.active ? 'deactivate' : 'activate')}
                 className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white disabled:opacity-60"
               >
-                {driver.active ? 'Deactivate' : 'Activate'}
+                {driver.active ? 'Tắt hoạt động' : 'Kích hoạt'}
               </button>
               <button
                 type="button"
@@ -408,7 +408,7 @@ export function AdminDriverManagement({ drivers }: { drivers: DriverProfileRecor
                 onClick={() => performAction(driver.userId, 'archive')}
                 className="rounded-2xl border border-slate-400/30 bg-slate-400/10 px-4 py-2 text-sm font-medium text-slate-100 disabled:opacity-60"
               >
-                Archive
+                Lưu trữ
               </button>
             </div>
           </article>

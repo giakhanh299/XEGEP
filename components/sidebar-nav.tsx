@@ -4,6 +4,17 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
+function getNavKind(role: string) {
+  const normalized = role.toLowerCase();
+  if (normalized.includes('khách') || normalized.includes('khach') || normalized.includes('customer')) {
+    return 'customer';
+  }
+  if (normalized.includes('tài') || normalized.includes('tai') || normalized.includes('driver')) {
+    return 'driver';
+  }
+  return 'admin';
+}
+
 export function SidebarNav({
   role,
   title,
@@ -16,33 +27,37 @@ export function SidebarNav({
   notificationCount?: number;
 }) {
   const pathname = usePathname();
+  const navKind = getNavKind(role);
   const items =
-    role === 'Customer'
+    navKind === 'customer'
       ? [
-          { href: '/customer', label: 'Home' },
-          { href: '/vehicles', label: 'Vehicles' },
-          { href: '/customer/book', label: 'Book Ride' },
-          { href: '/customer/my-trips', label: 'My Trips' },
-          { href: '/notifications', label: 'Notifications' },
-          { href: '/customer/profile', label: 'Profile' }
+          { href: '/customer', label: 'Trang chủ' },
+          { href: '/vehicles', label: 'Xe' },
+          { href: '/shared-rides', label: 'Xe ghép' },
+          { href: '/customer/book', label: 'Đặt xe' },
+          { href: '/customer/my-trips', label: 'Chuyến đi của tôi' },
+          { href: '/notifications', label: 'Thông báo' },
+          { href: '/customer/profile', label: 'Hồ sơ' }
         ]
-      : role === 'Driver'
+      : navKind === 'driver'
         ? [
-          { href: '/driver', label: 'Home' },
-          { href: '/driver/bookings', label: 'Bookings' },
-          { href: '/notifications', label: 'Notifications' },
-          { href: '/driver/trips', label: 'Trips' }
-        ]
+            { href: '/driver', label: 'Trang chủ' },
+            { href: '/driver/bookings', label: 'Chuyến đi' },
+            { href: '/shared-rides', label: 'Quản lý xe ghép' },
+            { href: '/notifications', label: 'Thông báo' },
+            { href: '/driver/trips', label: 'Lịch chạy' }
+          ]
         : [
-            { href: '/admin/dashboard', label: 'Dashboard' },
-            { href: '/admin/notifications', label: 'Notifications' },
-            { href: '/admin/ai-dispatch', label: 'AI Dispatch' },
-            { href: '/admin/bookings', label: 'Bookings' },
-            { href: '/admin/trips', label: 'Trips' },
-            { href: '/admin/payments', label: 'Payments' },
-            { href: '/admin/drivers', label: 'Drivers' },
-            { href: '/admin/vehicles', label: 'Vehicles' },
-            { href: '/admin/map', label: 'Map' }
+            { href: '/admin/dashboard', label: 'Bảng điều khiển' },
+            { href: '/admin/notifications', label: 'Thông báo' },
+            { href: '/admin/ai-dispatch', label: 'Điều phối AI' },
+            { href: '/admin/bookings', label: 'Chuyến đi' },
+            { href: '/shared-rides', label: 'Quản lý xe ghép' },
+            { href: '/admin/trips', label: 'Lượt chạy' },
+            { href: '/admin/payments', label: 'Thanh toán' },
+            { href: '/admin/drivers', label: 'Tài xế' },
+            { href: '/admin/vehicles', label: 'Xe' },
+            { href: '/admin/map', label: 'Bản đồ' }
           ];
 
   return (

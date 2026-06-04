@@ -6,7 +6,7 @@ import { validateNonEmpty, validatePhoneNumber } from '@/lib/validation';
 export async function GET() {
   const session = await getSessionFromCookies();
   if (!session || session.role !== 'customer') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: 'Không có quyền truy cập' }, { status: 401 });
   }
 
   const customer = await getCustomerByUserId(session.userId);
@@ -16,7 +16,7 @@ export async function GET() {
 export async function PUT(request: Request) {
   const session = await getSessionFromCookies();
   if (!session || session.role !== 'customer') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: 'Không có quyền truy cập' }, { status: 401 });
   }
 
   const body = await request.json();
@@ -24,7 +24,7 @@ export async function PUT(request: Request) {
     !validateNonEmpty(String(body.fullName ?? '')) ||
     !validatePhoneNumber(String(body.phone ?? ''))
   ) {
-    return NextResponse.json({ error: 'Invalid customer profile' }, { status: 400 });
+    return NextResponse.json({ error: 'Hồ sơ khách hàng không hợp lệ' }, { status: 400 });
   }
 
   const customer = await updateCustomerProfile(session.userId, {

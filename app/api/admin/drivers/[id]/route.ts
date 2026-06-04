@@ -13,7 +13,7 @@ import { validateApprovalStatus, validateNonEmpty, validatePhoneNumber, validate
 export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await requireAdminApiSession();
   if (!session) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    return NextResponse.json({ error: 'Không có quyền truy cập' }, { status: 403 });
   }
 
   const { id } = await params;
@@ -21,7 +21,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
   const driver = drivers.find((item) => item.userId === id);
 
   if (!driver) {
-    return NextResponse.json({ error: 'Driver not found' }, { status: 404 });
+    return NextResponse.json({ error: 'Không tìm thấy tài xế' }, { status: 404 });
   }
 
   return NextResponse.json({ driver });
@@ -30,7 +30,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await requireAdminApiSession();
   if (!session) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    return NextResponse.json({ error: 'Không có quyền truy cập' }, { status: 403 });
   }
 
   const { id } = await params;
@@ -43,7 +43,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     if (action === 'approve') {
       driver = await setDriverApproval(id, 'approved');
     } else if (action === 'reject') {
-      driver = await setDriverApproval(id, 'rejected', String(body.rejectedReason ?? 'Rejected by admin'));
+      driver = await setDriverApproval(id, 'rejected', String(body.rejectedReason ?? 'Bị từ chối bởi quản trị viên'));
     } else if (action === 'activate') {
       driver = await setDriverActiveState(id, true);
     } else if (action === 'deactivate') {
@@ -60,7 +60,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
         !validateNonEmpty(String(body.serviceArea ?? '')) ||
         (body.approvalStatus !== undefined && !validateApprovalStatus(String(body.approvalStatus)))
       ) {
-        return NextResponse.json({ error: 'Invalid driver payload' }, { status: 400 });
+        return NextResponse.json({ error: 'Dữ liệu tài xế không hợp lệ' }, { status: 400 });
       }
 
       driver = await updateDriverProfile(id, {
@@ -91,14 +91,14 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 
     return NextResponse.json({ driver });
   } catch (error) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : 'Driver not found' }, { status: 404 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : 'Không tìm thấy tài xế' }, { status: 404 });
   }
 }
 
 export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await requireAdminApiSession();
   if (!session) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    return NextResponse.json({ error: 'Không có quyền truy cập' }, { status: 403 });
   }
 
   const { id } = await params;

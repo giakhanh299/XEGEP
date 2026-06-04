@@ -9,17 +9,18 @@ export default async function CustomerLayout({ children }: Readonly<{ children: 
 
   return (
     <RoleShell
-      role="Customer"
-      title="Customer app"
-      description="Book a shared ride and track your current trip."
+      role="Khách hàng"
+      title="Ứng dụng khách hàng"
+      description="Đặt chuyến xe chung và theo dõi chuyến hiện tại."
       notificationCount={notificationCount}
       mobileNav={[
-        { href: '/customer', label: 'Home' },
-        { href: '/vehicles', label: 'Vehicles' },
-        { href: '/customer/book', label: 'Book Ride' },
-        { href: '/customer/my-trips', label: 'My Trips' },
-        { href: '/notifications', label: 'Notifications' },
-        { href: '/customer/profile', label: 'Profile' }
+        { href: '/customer', label: 'Trang chủ' },
+        { href: '/vehicles', label: 'Xe' },
+        { href: '/shared-rides', label: 'Xe ghép' },
+        { href: '/customer/book', label: 'Đặt xe' },
+        { href: '/customer/my-trips', label: 'Chuyến đi của tôi' },
+        { href: '/notifications', label: 'Thông báo' },
+        { href: '/customer/profile', label: 'Hồ sơ' }
       ]}
     >
       {children}

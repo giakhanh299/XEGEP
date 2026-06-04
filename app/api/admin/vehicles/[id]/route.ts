@@ -6,7 +6,7 @@ import { requireAdminApiSession } from '@/lib/auth/admin';
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await requireAdminApiSession();
   if (!session) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    return NextResponse.json({ error: 'Không có quyền truy cập' }, { status: 403 });
   }
 
   const { id } = await params;
@@ -14,7 +14,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   const success = await updateVehicle(id, body);
 
   if (!success) {
-    return NextResponse.json({ error: 'Vehicle not found' }, { status: 404 });
+    return NextResponse.json({ error: 'Không tìm thấy xe' }, { status: 404 });
   }
 
   recordAuditLog({

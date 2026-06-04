@@ -6,7 +6,7 @@ import { requireAdminApiSession } from '@/lib/auth/admin';
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await requireAdminApiSession();
   if (!session) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    return NextResponse.json({ error: 'Không có quyền truy cập' }, { status: 403 });
   }
 
   const { id } = await params;

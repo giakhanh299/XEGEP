@@ -7,7 +7,7 @@ export default async function AdminVehiclesPage() {
   const drivers = await listAllDriversAdmin();
 
   return (
-    <SectionCard title="Vehicle inventory" description="Vehicle details reflected from driver profiles.">
+    <SectionCard title="Danh sách xe" description="Thông tin xe được lấy từ hồ sơ tài xế.">
       <div className="grid gap-3 sm:grid-cols-2">
         {drivers.map((driver) => (
           <div key={driver.userId} className="rounded-2xl border border-white/10 bg-white/5 p-4">
@@ -22,16 +22,16 @@ export default async function AdminVehiclesPage() {
             </div>
             <div className="mt-3 grid gap-2 text-sm text-slate-300">
               <p>
-                <strong className="text-white">Driver:</strong> {driver.driverName}
+                <strong className="text-white">Tài xế:</strong> {driver.driverName}
               </p>
               <p>
-                <strong className="text-white">Seats:</strong> {driver.seatCount}
+                <strong className="text-white">Số ghế:</strong> {driver.seatCount}
               </p>
               <p>
-                <strong className="text-white">Service area:</strong> {driver.serviceArea}
+                <strong className="text-white">Khu vực hoạt động:</strong> {driver.serviceArea}
               </p>
               <p>
-                <strong className="text-white">Active:</strong> {driver.active ? 'Active' : 'Inactive'}
+                <strong className="text-white">Hoạt động:</strong> {driver.active ? 'Đang hoạt động' : 'Không hoạt động'}
               </p>
             </div>
           </div>

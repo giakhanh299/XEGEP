@@ -9,15 +9,16 @@ export default async function DriverLayout({ children }: Readonly<{ children: Re
 
   return (
     <RoleShell
-      role="Driver"
-      title="Driver app"
-      description="Handle assigned trips and pickup workflow."
+      role="Tài xế"
+      title="Ứng dụng tài xế"
+      description="Xử lý các chuyến được giao và quy trình đón khách."
       notificationCount={notificationCount}
       mobileNav={[
-        { href: '/driver', label: 'Home' },
-        { href: '/driver/bookings', label: 'Bookings' },
-        { href: '/notifications', label: 'Notifications' },
-        { href: '/driver/trips', label: 'Trips' }
+        { href: '/driver', label: 'Trang chủ' },
+        { href: '/driver/bookings', label: 'Chuyến đi' },
+        { href: '/shared-rides', label: 'Quản lý xe ghép' },
+        { href: '/notifications', label: 'Thông báo' },
+        { href: '/driver/trips', label: 'Lịch chạy' }
       ]}
     >
       {children}

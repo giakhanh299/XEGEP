@@ -6,7 +6,7 @@ import { requireAdminApiSession } from '@/lib/auth/admin';
 export async function GET() {
   const session = await requireAdminApiSession();
   if (!session) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    return NextResponse.json({ error: 'Không có quyền truy cập' }, { status: 403 });
   }
 
   const trips = await listTrips();
@@ -16,7 +16,7 @@ export async function GET() {
 export async function POST(request: Request) {
   const session = await requireAdminApiSession();
   if (!session) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    return NextResponse.json({ error: 'Không có quyền truy cập' }, { status: 403 });
   }
 
   const body = await request.json();

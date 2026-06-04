@@ -5,7 +5,7 @@ import { countUnreadNotifications, listNotifications, markAllNotificationsRead }
 export async function GET() {
   const session = await requireAdminApiSession();
   if (!session) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    return NextResponse.json({ error: 'Không có quyền truy cập' }, { status: 403 });
   }
 
   const notifications = await listNotifications({ userId: session.userId, role: session.role });
@@ -16,12 +16,12 @@ export async function GET() {
 export async function PATCH(request: Request) {
   const session = await requireAdminApiSession();
   if (!session) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    return NextResponse.json({ error: 'Không có quyền truy cập' }, { status: 403 });
   }
 
   const body = await request.json().catch(() => ({}));
   if (String(body.action ?? '') !== 'mark_all_read') {
-    return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
+    return NextResponse.json({ error: 'Hành động không hợp lệ' }, { status: 400 });
   }
 
   const updated = await markAllNotificationsRead({ userId: session.userId, role: session.role });

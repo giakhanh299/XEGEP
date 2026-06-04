@@ -10,16 +10,16 @@ export async function POST(request: Request) {
     const kind = String(formData.get('kind') ?? 'driver');
 
     if (!(file instanceof File)) {
-      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
+      return NextResponse.json({ error: 'Chưa chọn tệp' }, { status: 400 });
     }
 
     if (kind !== 'driver' && kind !== 'vehicle') {
-      return NextResponse.json({ error: 'Invalid upload kind' }, { status: 400 });
+      return NextResponse.json({ error: 'Loại tải lên không hợp lệ' }, { status: 400 });
     }
 
     const result = await uploadImageFile(file, kind);
     return NextResponse.json(result);
   } catch (error) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : 'Upload failed' }, { status: 400 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : 'Tải ảnh thất bại' }, { status: 400 });
   }
 }

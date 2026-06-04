@@ -6,11 +6,26 @@ import { listDrivers, listTrips, listVehicles } from '@/lib/services/fleet';
 
 const tripStatuses = ['ready', 'boarding', 'in_progress', 'completed', 'cancelled'] as const;
 
+function tripStatusLabel(status: (typeof tripStatuses)[number]) {
+  switch (status) {
+    case 'ready':
+      return 'Sẵn sàng';
+    case 'boarding':
+      return 'Đang đón khách';
+    case 'in_progress':
+      return 'Đang thực hiện';
+    case 'completed':
+      return 'Hoàn thành';
+    case 'cancelled':
+      return 'Đã hủy';
+  }
+}
+
 export default async function AdminTripsPage() {
   const [trips, drivers, vehicles] = await Promise.all([listTrips(), listDrivers(), listVehicles()]);
 
   return (
-    <SectionCard title="Trips" description="Create, combine, and dispatch trips.">
+    <SectionCard title="Lượt chạy" description="Tạo, ghép và điều phối các chuyến chạy.">
       <div className="space-y-3">
         {trips.map((trip) => (
           <div key={trip.id} className="rounded-2xl border border-white/10 bg-white/5 p-4">
@@ -18,10 +33,10 @@ export default async function AdminTripsPage() {
               <div>
                 <p className="font-semibold text-white">{trip.routeLabel ?? trip.routeType}</p>
                 <p className="text-sm text-slate-400">
-                  Passenger count: {trip.passengerCount} / {trip.maxCapacity}
+                  Số khách: {trip.passengerCount} / {trip.maxCapacity}
                 </p>
                 <p className="text-sm text-slate-400">
-                  Driver: {trip.driver ?? trip.driverId ?? 'Unassigned'} | Vehicle: {trip.vehicle ?? trip.vehicleId ?? 'Unassigned'}
+                  Tài xế: {trip.driver ?? trip.driverId ?? 'Chưa phân công'} | Xe: {trip.vehicle ?? trip.vehicleId ?? 'Chưa phân công'}
                 </p>
               </div>
               <StatusBadge status={trip.tripStatus} />
@@ -30,13 +45,13 @@ export default async function AdminTripsPage() {
               {tripStatuses.map((status) => (
                 <AdminActionButton
                   key={status}
-                  label={status.replace('_', ' ')}
+                  label={tripStatusLabel(status)}
                   endpoint={`/api/admin/trips/${trip.id}`}
                   payload={{ tripStatus: status }}
                 />
               ))}
               <Link href={`/admin/trips/${trip.id}/map`} className="rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-2 text-sm font-medium text-white">
-                Map
+                Bản đồ
               </Link>
             </div>
           </div>
@@ -44,10 +59,10 @@ export default async function AdminTripsPage() {
       </div>
       <div className="mt-6 grid gap-3 md:grid-cols-2">
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-slate-200">
-          Drivers available: {drivers.length}
+          Tài xế khả dụng: {drivers.length}
         </div>
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-slate-200">
-          Vehicles available: {vehicles.length}
+          Xe khả dụng: {vehicles.length}
         </div>
       </div>
     </SectionCard>

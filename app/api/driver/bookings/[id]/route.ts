@@ -6,13 +6,13 @@ import { validateBookingStatus } from '@/lib/validation';
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getSessionFromCookies();
   if (!session || session.role !== 'driver') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: 'Không có quyền truy cập' }, { status: 401 });
   }
 
   const { id } = await params;
   const booking = await getBookingForActor(id, { userId: session.userId, role: session.role });
   if (!booking) {
-    return NextResponse.json({ error: 'Booking not found' }, { status: 404 });
+    return NextResponse.json({ error: 'Không tìm thấy chuyến đi' }, { status: 404 });
   }
 
   return NextResponse.json({ booking });
@@ -21,7 +21,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getSessionFromCookies();
   if (!session || session.role !== 'driver') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: 'Không có quyền truy cập' }, { status: 401 });
   }
 
   const { id } = await params;
@@ -29,7 +29,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   const status = String(body.status ?? '');
 
   if (!validateBookingStatus(status)) {
-    return NextResponse.json({ error: 'Invalid status' }, { status: 400 });
+    return NextResponse.json({ error: 'Trạng thái không hợp lệ' }, { status: 400 });
   }
 
   const booking = await updateBookingStatus(id, status, { userId: session.userId, role: session.role });

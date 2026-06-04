@@ -10,16 +10,16 @@ export default async function DriverProfilePage() {
 
   if (!session || session.role !== 'driver' || !driver) {
     return (
-      <SectionCard title="Driver profile" description="Sign in as a driver to manage your vehicle profile.">
+      <SectionCard title="Hồ sơ tài xế" description="Đăng nhập bằng tài khoản tài xế để quản lý hồ sơ xe.">
         <Link href="/auth" className="inline-flex rounded-2xl bg-emerald-400 px-4 py-3 font-semibold text-slate-950">
-          Go to sign in
+          Đi đến đăng nhập
         </Link>
       </SectionCard>
     );
   }
 
   return (
-    <SectionCard title="Driver profile" description="Update your vehicle, photos, and service area.">
+    <SectionCard title="Hồ sơ tài xế" description="Cập nhật xe, ảnh và khu vực hoạt động.">
       <DriverProfileForm driver={driver} />
     </SectionCard>
   );

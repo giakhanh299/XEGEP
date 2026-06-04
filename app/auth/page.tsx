@@ -5,11 +5,11 @@ export default function AuthPage() {
   return (
     <main className="mx-auto min-h-screen max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
       <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-        <SectionCard title="Account access" description="Create a customer or driver account and sign in securely.">
+        <SectionCard title="Truy cập tài khoản" description="Tạo tài khoản khách hàng hoặc tài xế và đăng nhập an toàn.">
           <div className="space-y-4 text-sm leading-6 text-slate-300">
-            <p>Use customer registration for booking access and booking history.</p>
-            <p>Use driver registration to manage vehicles, service areas, and incoming bookings.</p>
-            <p>Passwords are hashed before storage and a signed session cookie is issued on login.</p>
+            <p>Dùng đăng ký khách hàng để đặt xe và xem lịch sử chuyến đi.</p>
+            <p>Dùng đăng ký tài xế để quản lý xe, khu vực hoạt động và các chuyến đến.</p>
+            <p>Mật khẩu được băm trước khi lưu và cookie phiên đăng nhập sẽ được tạo khi đăng nhập.</p>
           </div>
         </SectionCard>
         <AuthForm />

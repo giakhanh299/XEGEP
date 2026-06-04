@@ -23,7 +23,7 @@ export default async function AdminBookingDetailPage({
   }
 
   return (
-    <SectionCard title="Booking detail" description="Customer, driver, vehicle, and status timeline.">
+    <SectionCard title="Chi tiết chuyến đi" description="Thông tin khách hàng, tài xế, xe và dòng thời gian trạng thái.">
       <div className="space-y-5 text-sm text-slate-300">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -35,67 +35,67 @@ export default async function AdminBookingDetailPage({
 
         <div className="grid gap-4 md:grid-cols-3">
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="mb-2 text-base font-semibold text-white">Customer info</p>
+            <p className="mb-2 text-base font-semibold text-white">Thông tin khách hàng</p>
             <p>
-              <strong className="text-white">Name:</strong> {booking.customerSnapshot?.name ?? booking.customerName}
+              <strong className="text-white">Tên:</strong> {booking.customerSnapshot?.name ?? booking.customerName}
             </p>
             <p>
-              <strong className="text-white">Phone:</strong> {booking.customerSnapshot?.phone ?? booking.phone}
+              <strong className="text-white">Điện thoại:</strong> {booking.customerSnapshot?.phone ?? booking.phone}
             </p>
             <p>
-              <strong className="text-white">Username:</strong> {booking.customerSnapshot?.username ?? 'N/A'}
+              <strong className="text-white">Tên đăng nhập:</strong> {booking.customerSnapshot?.username ?? 'Không có'}
             </p>
             <p>
-              <strong className="text-white">Estimated fare:</strong>{' '}
-              {booking.estimatedFare ? `${booking.estimatedFare.toLocaleString()} VND` : 'N/A'}
-            </p>
-          </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="mb-2 text-base font-semibold text-white">Driver info</p>
-            <p>
-              <strong className="text-white">Name:</strong> {booking.driverSnapshot?.driverName ?? 'Unassigned'}
-            </p>
-            <p>
-              <strong className="text-white">Phone:</strong> {booking.driverSnapshot?.phone ?? 'N/A'}
-            </p>
-            <p>
-              <strong className="text-white">Service area:</strong> {booking.driverSnapshot?.serviceArea ?? 'N/A'}
+              <strong className="text-white">Giá ước tính:</strong>{' '}
+              {booking.estimatedFare ? `${booking.estimatedFare.toLocaleString()} VND` : 'Không có'}
             </p>
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="mb-2 text-base font-semibold text-white">Vehicle info</p>
+            <p className="mb-2 text-base font-semibold text-white">Thông tin tài xế</p>
             <p>
-              <strong className="text-white">Type:</strong> {booking.vehicleSnapshot?.vehicleType ?? 'N/A'}
+              <strong className="text-white">Tên:</strong> {booking.driverSnapshot?.driverName ?? 'Chưa phân công'}
             </p>
             <p>
-              <strong className="text-white">Plate:</strong> {booking.vehicleSnapshot?.plateNumber ?? 'N/A'}
+              <strong className="text-white">Điện thoại:</strong> {booking.driverSnapshot?.phone ?? 'Không có'}
             </p>
             <p>
-              <strong className="text-white">Seats:</strong> {booking.vehicleSnapshot?.seatCount ?? 'N/A'}
+              <strong className="text-white">Khu vực hoạt động:</strong> {booking.driverSnapshot?.serviceArea ?? 'Không có'}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <p className="mb-2 text-base font-semibold text-white">Thông tin xe</p>
+            <p>
+              <strong className="text-white">Loại:</strong> {booking.vehicleSnapshot?.vehicleType ?? 'Không có'}
+            </p>
+            <p>
+              <strong className="text-white">Biển số:</strong> {booking.vehicleSnapshot?.plateNumber ?? 'Không có'}
+            </p>
+            <p>
+              <strong className="text-white">Số ghế:</strong> {booking.vehicleSnapshot?.seatCount ?? 'Không có'}
             </p>
           </div>
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">
           <p>
-            <strong className="text-white">Pickup:</strong> {booking.pickupLocation}
+            <strong className="text-white">Điểm đón:</strong> {booking.pickupLocation}
           </p>
           <p>
-            <strong className="text-white">Destination:</strong> {booking.dropoffLocation}
+            <strong className="text-white">Điểm đến:</strong> {booking.dropoffLocation}
           </p>
           <p>
-            <strong className="text-white">Distance:</strong> {booking.estimatedDistanceKm ?? 'N/A'} km
+            <strong className="text-white">Khoảng cách:</strong> {booking.estimatedDistanceKm ?? 'Không có'} km
           </p>
           <p>
-            <strong className="text-white">Travel time:</strong> {booking.travelTime ?? booking.bookingTime ?? 'N/A'}
+            <strong className="text-white">Thời gian đi:</strong> {booking.travelTime ?? booking.bookingTime ?? 'Không có'}
           </p>
           <p>
-            <strong className="text-white">Notes:</strong> {booking.notes ?? 'None'}
+            <strong className="text-white">Ghi chú:</strong> {booking.notes ?? 'Không có'}
           </p>
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-          <p className="mb-3 text-base font-semibold text-white">Status history</p>
+          <p className="mb-3 text-base font-semibold text-white">Lịch sử trạng thái</p>
           <BookingHistory history={booking.statusHistory ?? []} />
         </div>
 
@@ -112,7 +112,7 @@ export default async function AdminBookingDetailPage({
 
         <div>
           <Link href="/admin/bookings" className="inline-flex text-sm font-semibold text-emerald-300">
-            Back to bookings
+            Quay lại danh sách chuyến
           </Link>
         </div>
       </div>

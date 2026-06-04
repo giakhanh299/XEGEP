@@ -34,13 +34,13 @@ export function AdminCreateForm({
         body: JSON.stringify(payload)
       });
       if (!response.ok) {
-        throw new Error('Create failed');
+        throw new Error('Tạo mới thất bại');
       }
       event.currentTarget.reset();
-      setMessage(`${title} saved`);
+      setMessage(`Đã lưu ${title}`);
       window.location.reload();
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : 'Request failed');
+      setMessage(error instanceof Error ? error.message : 'Yêu cầu thất bại');
     } finally {
       setPending(false);
     }
@@ -50,7 +50,7 @@ export function AdminCreateForm({
     <form onSubmit={handleSubmit} className="glass space-y-4 rounded-[1.75rem] p-5">
       <div>
         <p className="text-lg font-semibold text-white">{title}</p>
-        <p className="text-sm text-slate-400">Create or refresh operational records.</p>
+        <p className="text-sm text-slate-400">Tạo mới hoặc làm mới dữ liệu vận hành.</p>
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
         {fields.map((field) => (
@@ -70,7 +70,7 @@ export function AdminCreateForm({
         disabled={pending}
         className="rounded-2xl bg-emerald-400 px-4 py-3 font-semibold text-slate-950 disabled:opacity-60"
       >
-        {pending ? 'Saving...' : 'Save'}
+        {pending ? 'Đang lưu...' : 'Lưu'}
       </button>
       {message ? <p className="text-sm text-slate-300">{message}</p> : null}
     </form>

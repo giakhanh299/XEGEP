@@ -7,9 +7,9 @@ import { StatusBadge } from '@/components/status-badge';
 import { getLatestBookingStatusLabel } from '@/lib/booking-history';
 
 const actions = [
-  { label: 'Accept', status: 'accepted' },
-  { label: 'Reject', status: 'cancelled' },
-  { label: 'Complete', status: 'completed' }
+  { label: 'Nhận chuyến', status: 'accepted' },
+  { label: 'Từ chối', status: 'cancelled' },
+  { label: 'Hoàn thành', status: 'completed' }
 ] as const;
 
 export function DriverBookingsBoard({ bookings }: { bookings: BookingRecord[] }) {
@@ -26,7 +26,7 @@ export function DriverBookingsBoard({ bookings }: { bookings: BookingRecord[] })
 
   return (
     <div className="space-y-3">
-      {bookings.length === 0 ? <p className="text-sm text-slate-300">No incoming bookings yet.</p> : null}
+      {bookings.length === 0 ? <p className="text-sm text-slate-300">Chưa có chuyến đến.</p> : null}
       {bookings.map((booking) => {
         const latestUpdate = getLatestBookingStatusLabel(booking);
 
@@ -43,13 +43,13 @@ export function DriverBookingsBoard({ bookings }: { bookings: BookingRecord[] })
             </div>
             <div className="mt-3 grid gap-2 text-sm text-slate-300 sm:grid-cols-2">
               <p>
-                <strong className="text-white">Booking time:</strong> {booking.bookingTime ?? booking.travelDate}
+                  <strong className="text-white">Thời gian đặt:</strong> {booking.bookingTime ?? booking.travelDate}
               </p>
               <p>
-                <strong className="text-white">Phone:</strong> {booking.phone}
+                <strong className="text-white">Điện thoại:</strong> {booking.phone}
               </p>
               <p className="sm:col-span-2">
-                <strong className="text-white">Latest update:</strong> {latestUpdate.status} at {latestUpdate.timestamp}
+                <strong className="text-white">Cập nhật gần nhất:</strong> {latestUpdate.status} lúc {latestUpdate.timestamp}
               </p>
             </div>
             {booking.notes ? <p className="mt-2 text-sm text-slate-300">{booking.notes}</p> : null}
@@ -68,7 +68,7 @@ export function DriverBookingsBoard({ bookings }: { bookings: BookingRecord[] })
                 href={`/driver/bookings/${booking.id}`}
                 className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-sm font-medium text-emerald-100"
               >
-                View details
+                Xem chi tiết
               </Link>
             </div>
           </article>

@@ -8,7 +8,7 @@ import { logError } from '@/lib/logging/errorLogger';
 export async function GET() {
   const session = await getSessionFromCookies();
   if (!session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: 'Không có quyền truy cập' }, { status: 401 });
   }
 
   const bookings =
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
   const clientKey = request.headers.get('x-forwarded-for') ?? 'booking-form';
 
   if (isRateLimited(clientKey, 5, 60_000)) {
-    return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
+    return NextResponse.json({ error: 'Quá nhiều yêu cầu' }, { status: 429 });
   }
 
   try {
@@ -32,11 +32,11 @@ export async function POST(request: Request) {
     const session = await getSessionFromCookies();
 
     if (!session) {
-      return NextResponse.json({ error: 'Please sign in to create a booking' }, { status: 401 });
+      return NextResponse.json({ error: 'Vui lòng đăng nhập để tạo chuyến đi' }, { status: 401 });
     }
 
     if (session.role !== 'customer') {
-      return NextResponse.json({ error: 'Only customers can create bookings' }, { status: 403 });
+      return NextResponse.json({ error: 'Chỉ khách hàng mới có thể tạo chuyến đi' }, { status: 403 });
     }
 
     const estimatedDistanceKm = Number(body.estimatedDistanceKm ?? 0);
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
       !validatePositiveNumber(fareBase) ||
       !validatePositiveNumber(farePerKm)
     ) {
-      return NextResponse.json({ error: 'Invalid booking payload' }, { status: 400 });
+      return NextResponse.json({ error: 'Dữ liệu chuyến đi không hợp lệ' }, { status: 400 });
     }
 
     const booking = await createRideBooking({
@@ -72,6 +72,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ booking }, { status: 201 });
   } catch (error) {
     logError(error, 'api/bookings');
-    return NextResponse.json({ error: 'Unable to create booking' }, { status: 500 });
+    return NextResponse.json({ error: 'Không thể tạo chuyến đi' }, { status: 500 });
   }
 }

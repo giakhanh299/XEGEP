@@ -7,7 +7,7 @@ import { validateBookingStatus } from '@/lib/validation';
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await requireAdminApiSession();
   if (!session) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    return NextResponse.json({ error: 'Không có quyền truy cập' }, { status: 403 });
   }
 
   const { id } = await params;
@@ -15,13 +15,13 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   const booking = await getBooking(id);
 
   if (!booking) {
-    return NextResponse.json({ error: 'Booking not found' }, { status: 404 });
+    return NextResponse.json({ error: 'Không tìm thấy chuyến đi' }, { status: 404 });
   }
 
   if (body.status !== undefined) {
     const status = String(body.status ?? '');
     if (!validateBookingStatus(status)) {
-      return NextResponse.json({ error: 'Invalid status' }, { status: 400 });
+      return NextResponse.json({ error: 'Trạng thái không hợp lệ' }, { status: 400 });
     }
 
     const updated = await updateBookingStatus(id, status, { userId: session.userId, role: session.role });
@@ -38,5 +38,5 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     return NextResponse.json({ booking: updated });
   }
 
-  return NextResponse.json({ error: 'No booking status provided' }, { status: 400 });
+  return NextResponse.json({ error: 'Chưa cung cấp trạng thái chuyến đi' }, { status: 400 });
 }

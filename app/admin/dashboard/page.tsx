@@ -20,24 +20,24 @@ export default async function AdminDashboardPage() {
   return (
     <div className="grid gap-4">
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Total Bookings" value={String(bookings.length)} detail="Live booking count." />
-        <StatCard label="Approved Drivers" value={String(approvedDrivers.length)} detail="Visible to customers." />
-        <StatCard label="Pending Drivers" value={String(pendingDrivers.length)} detail="Awaiting review." />
-        <StatCard label="Rejected Drivers" value={String(rejectedDrivers.length)} detail="Not visible to customers." />
+        <StatCard label="Tổng chuyến" value={String(bookings.length)} detail="Số chuyến đang ghi nhận." />
+        <StatCard label="Tài xế đã duyệt" value={String(approvedDrivers.length)} detail="Hiển thị cho khách hàng." />
+        <StatCard label="Tài xế chờ duyệt" value={String(pendingDrivers.length)} detail="Đang chờ xem xét." />
+        <StatCard label="Tài xế bị từ chối" value={String(rejectedDrivers.length)} detail="Không hiển thị cho khách hàng." />
       </div>
-      <SectionCard title="Operations" description="Live fleet and booking summary.">
+      <SectionCard title="Vận hành" description="Tổng quan đội xe và chuyến đi theo thời gian thực.">
         <div className="grid gap-4 md:grid-cols-2">
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-slate-200">
-            Active trips: {activeTrips.length}
+            Chuyến đang chạy: {activeTrips.length}
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-slate-200">
-            Completed trips: {completedTrips.length}
+            Chuyến đã hoàn thành: {completedTrips.length}
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-slate-200">
-            Pending bookings: {bookings.filter((booking) => booking.status === 'pending').length}
+            Chuyến chờ xử lý: {bookings.filter((booking) => booking.status === 'pending').length}
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-slate-200">
-            Revenue: {Math.round(revenue / 1000)}K
+            Doanh thu: {Math.round(revenue / 1000)}K
           </div>
         </div>
       </SectionCard>

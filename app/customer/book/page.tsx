@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { BookingForm } from '@/components/booking-form';
 import { SectionCard } from '@/components/section-card';
 import { getSessionFromCookies } from '@/lib/auth/session';
@@ -30,13 +31,19 @@ export default async function CustomerBookPage({
         selectedDriverId={params.driverId ?? null}
         drivers={drivers}
       />
-      <SectionCard title="Booking rules" description="Operational guardrails for the first release.">
+      <SectionCard title="Quy tắc đặt xe" description="Các giới hạn vận hành cho bản phát hành đầu tiên.">
         <ul className="space-y-3 text-sm leading-6 text-slate-300">
-          <li>Customer details are loaded from your signed-in account.</li>
-          <li>Drivers can review and manage incoming bookings from their dashboard.</li>
-          <li>Vehicle images fall back to a placeholder if no photo URL is set.</li>
-          <li>Image upload support can be swapped to R2 later without changing the UI.</li>
+          <li>Thông tin khách hàng sẽ được lấy từ tài khoản đang đăng nhập.</li>
+          <li>Tài xế có thể xem và xử lý các chuyến đến từ bảng điều khiển.</li>
+          <li>Ảnh xe sẽ dùng ảnh thay thế nếu chưa có URL ảnh.</li>
+          <li>Bạn có thể xem các nhóm xe ghép còn chỗ tại mục Xe ghép.</li>
+          <li>Hỗ trợ tải ảnh có thể chuyển sang R2 sau này mà không cần đổi giao diện.</li>
         </ul>
+        <div className="mt-4">
+          <Link href="/shared-rides" className="inline-flex rounded-2xl bg-emerald-400 px-4 py-2 text-sm font-semibold text-slate-950">
+            Xem xe ghép
+          </Link>
+        </div>
       </SectionCard>
     </div>
   );

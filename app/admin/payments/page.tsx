@@ -8,29 +8,29 @@ export default function AdminPaymentsPage() {
 
   return (
     <div className="grid gap-4">
-      <SectionCard title="Revenue summary" description="Daily and monthly revenue placeholders.">
+      <SectionCard title="Tổng quan doanh thu" description="Khung tạm cho doanh thu theo ngày và theo tháng.">
         <div className="grid gap-3 md:grid-cols-3">
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-slate-200">
-            Total paid: {summary.totalPaid}
+            Tổng đã thu: {summary.totalPaid}
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-slate-200">
-            Total unpaid: {summary.totalUnpaid}
+            Tổng chưa thu: {summary.totalUnpaid}
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-slate-200">
-            Driver payouts: {payoutCount}
+            Chi trả tài xế: {payoutCount}
           </div>
         </div>
       </SectionCard>
 
-      <SectionCard title="Payments" description="Track booking-level payment state.">
+      <SectionCard title="Thanh toán" description="Theo dõi trạng thái thanh toán theo từng chuyến đi.">
         <div className="space-y-3">
           {mockPayments.map((payment) => (
             <div key={payment.id} className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-slate-300">
-              <p className="text-white">Booking {payment.bookingId}</p>
+              <p className="text-white">Chuyến {payment.bookingId}</p>
               <p>
-                Amount: {payment.amount} via {describePaymentMethod(payment.method)}
+                Số tiền: {payment.amount} qua {describePaymentMethod(payment.method)}
               </p>
-              <p>Status: {payment.status}</p>
+              <p>Trạng thái: {payment.status}</p>
             </div>
           ))}
         </div>

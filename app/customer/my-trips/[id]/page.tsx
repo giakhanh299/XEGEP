@@ -21,27 +21,27 @@ export default async function CustomerTripDetailPage({
   return (
     <SectionCard
       title={`${booking.pickupLocation} to ${booking.dropoffLocation}`}
-      description="Booking snapshot and live status."
+      description="Tóm tắt chuyến đi và trạng thái hiện tại."
     >
       <div className="space-y-3 text-sm text-slate-300">
         <StatusBadge status={booking.status} />
         <p>
-          Driver: <span className="text-white">{booking.driverSnapshot?.driverName ?? 'Pending assignment'}</span>
+          Tài xế: <span className="text-white">{booking.driverSnapshot?.driverName ?? 'Đang chờ phân công'}</span>
         </p>
         <p>
-          Vehicle: <span className="text-white">{booking.vehicleSnapshot?.vehicleType ?? 'Pending assignment'}</span>
+          Xe: <span className="text-white">{booking.vehicleSnapshot?.vehicleType ?? 'Đang chờ phân công'}</span>
         </p>
         <p>
-          Estimated fare: <span className="text-white">{booking.estimatedFare ? `${booking.estimatedFare.toLocaleString()} VND` : 'N/A'}</span>
+          Giá ước tính: <span className="text-white">{booking.estimatedFare ? `${booking.estimatedFare.toLocaleString()} VND` : 'Không có'}</span>
         </p>
         <p>
-          Booking time: <span className="text-white">{booking.bookingTime ?? booking.createdAt}</span>
+          Thời gian đặt: <span className="text-white">{booking.bookingTime ?? booking.createdAt}</span>
         </p>
         <p>
-          Notes: <span className="text-white">{booking.notes ?? 'None'}</span>
+          Ghi chú: <span className="text-white">{booking.notes ?? 'Không có'}</span>
         </p>
         <div className="pt-2">
-          <p className="mb-3 text-base font-semibold text-white">Status history</p>
+          <p className="mb-3 text-base font-semibold text-white">Lịch sử trạng thái</p>
           <BookingHistory history={booking.statusHistory ?? []} />
         </div>
       </div>

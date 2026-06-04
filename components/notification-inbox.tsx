@@ -50,18 +50,18 @@ export function NotificationInbox({
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm text-slate-300">
-          {notifications.filter((notification) => !notification.isRead).length} unread notifications
+          {notifications.filter((notification) => !notification.isRead).length} thông báo chưa đọc
         </p>
         <button
           type="button"
           onClick={markAllRead}
           className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white"
         >
-          Mark all as read
+          Đánh dấu tất cả đã đọc
         </button>
       </div>
 
-      {notifications.length === 0 ? <p className="text-sm text-slate-300">No notifications yet.</p> : null}
+      {notifications.length === 0 ? <p className="text-sm text-slate-300">Chưa có thông báo.</p> : null}
 
       <div className="space-y-3">
         {notifications.map((notification) => {
@@ -91,7 +91,7 @@ export function NotificationInbox({
                       href={href}
                       className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white"
                     >
-                      View booking
+                      Xem chuyến đi
                     </Link>
                   ) : null}
                   {!notification.isRead ? (
@@ -100,7 +100,7 @@ export function NotificationInbox({
                       onClick={() => markRead(notification.id)}
                       className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-sm font-medium text-emerald-100"
                     >
-                      Mark read
+                      Đánh dấu đã đọc
                     </button>
                   ) : null}
                 </div>

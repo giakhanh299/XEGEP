@@ -17,7 +17,7 @@ async function sendPatch(endpoint: string, payload: Record<string, unknown>) {
 
   if (!response.ok) {
     const text = await response.text();
-    throw new Error(text || 'Request failed');
+    throw new Error(text || 'Yêu cầu thất bại');
   }
 }
 
@@ -39,8 +39,7 @@ export function AdminActionButton({ label, endpoint, payload }: ActionButtonProp
       }}
       className="rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-2 text-sm font-medium text-white disabled:opacity-60"
     >
-      {pending ? 'Saving...' : label}
+      {pending ? 'Đang lưu...' : label}
     </button>
   );
 }
-

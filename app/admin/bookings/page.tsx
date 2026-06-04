@@ -11,7 +11,7 @@ export default async function AdminBookingsPage() {
   const bookings = await listBookings();
 
   return (
-    <SectionCard title="Bookings" description="Review and update booking statuses.">
+    <SectionCard title="Chuyến đi" description="Xem và cập nhật trạng thái chuyến đi.">
       <div className="space-y-3">
         {bookings.map((booking) => {
           const latestUpdate = getLatestBookingStatusLabel(booking);
@@ -24,7 +24,7 @@ export default async function AdminBookingsPage() {
                   <p className="text-sm text-slate-400">
                     {booking.pickupLocation} to {booking.dropoffLocation}
                   </p>
-                  <p className="mt-1 text-xs text-slate-500">Latest update: {latestUpdate.status}</p>
+                  <p className="mt-1 text-xs text-slate-500">Cập nhật gần nhất: {latestUpdate.status}</p>
                 </div>
                 <StatusBadge status={booking.status} />
               </div>
@@ -41,7 +41,7 @@ export default async function AdminBookingsPage() {
                   href={`/admin/bookings/${booking.id}`}
                   className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white"
                 >
-                  View details
+                  Xem chi tiết
                 </Link>
               </div>
             </div>

@@ -19,12 +19,12 @@ export async function POST(request: Request) {
     const password = String(body.password ?? '');
 
     if (!validateUsername(username) || !validatePassword(password)) {
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 400 });
+      return NextResponse.json({ error: 'Thông tin đăng nhập không hợp lệ' }, { status: 400 });
     }
 
     const bundle = await authenticateAccount(username, password);
     if (!bundle) {
-      return NextResponse.json({ error: 'Invalid username or password' }, { status: 401 });
+      return NextResponse.json({ error: 'Tên đăng nhập hoặc mật khẩu không đúng' }, { status: 401 });
     }
 
     const response = NextResponse.json({
@@ -48,6 +48,6 @@ export async function POST(request: Request) {
 
     return response;
   } catch {
-    return NextResponse.json({ error: 'Unable to login' }, { status: 500 });
+    return NextResponse.json({ error: 'Không thể đăng nhập' }, { status: 500 });
   }
 }

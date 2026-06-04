@@ -32,7 +32,7 @@ export function RoleShell({
                 <p className="mt-1 text-sm text-slate-300">{description}</p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-200">
-                Dai Loc Ride Share
+                Đặt xe Đại Lộc
               </div>
             </div>
           </header>

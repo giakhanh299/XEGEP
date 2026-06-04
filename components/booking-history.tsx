@@ -3,13 +3,13 @@ import { BookingStatusHistoryEntry } from '@/lib/types';
 function labelForStatus(status: BookingStatusHistoryEntry['status']) {
   switch (status) {
     case 'created':
-      return 'Created';
+      return 'Đã tạo';
     case 'accepted':
-      return 'Accepted';
+      return 'Đã nhận chuyến';
     case 'cancelled':
-      return 'Rejected / Cancelled';
+      return 'Từ chối / Đã hủy';
     case 'completed':
-      return 'Completed';
+      return 'Hoàn thành';
     default:
       return status.replaceAll('_', ' ');
   }
@@ -17,7 +17,7 @@ function labelForStatus(status: BookingStatusHistoryEntry['status']) {
 
 export function BookingHistory({ history }: { history: BookingStatusHistoryEntry[] }) {
   if (!history.length) {
-    return <p className="text-sm text-slate-400">No status history yet.</p>;
+    return <p className="text-sm text-slate-400">Chưa có lịch sử trạng thái.</p>;
   }
 
   return (

@@ -166,13 +166,13 @@ async function getDriverForBooking(passengerCount: number, driverId?: string | n
   if (driverId) {
     const driver = await getDriverByUserId(driverId);
     if (!driver) {
-      throw new Error('Driver not found');
+      throw new Error('Không tìm thấy tài xế');
     }
     if (!driver.active || driver.approvalStatus !== 'approved' || driver.archivedAt) {
-      throw new Error('Selected vehicle is not available');
+      throw new Error('Xe đã chọn không khả dụng');
     }
     if (driver.availableSeats < passengerCount) {
-      throw new Error('Selected vehicle does not have enough available seats');
+      throw new Error('Xe đã chọn không còn đủ ghế trống');
     }
     return driver;
   }
@@ -180,7 +180,7 @@ async function getDriverForBooking(passengerCount: number, driverId?: string | n
   const drivers = await listAvailableDrivers();
   const eligibleDriver = drivers.find((driver) => driver.availableSeats >= passengerCount);
   if (!eligibleDriver) {
-    throw new Error('No available vehicle has enough seats');
+    throw new Error('Không có xe khả dụng nào đủ ghế');
   }
 
   return eligibleDriver;
@@ -189,14 +189,14 @@ async function getDriverForBooking(passengerCount: number, driverId?: string | n
 async function adjustDriverAvailableSeats(driverId: string, delta: number) {
   const driver = await getDriverByUserId(driverId);
   if (!driver) {
-    throw new Error('Driver not found');
+    throw new Error('Không tìm thấy tài xế');
   }
 
   const currentSeats = driver.availableSeats ?? driver.seatCount;
   const nextSeats = currentSeats + delta;
 
   if (nextSeats < 0) {
-    throw new Error('Selected vehicle does not have enough available seats');
+      throw new Error('Xe đã chọn không còn đủ ghế trống');
   }
 
   await updateDriverProfile(driverId, {
@@ -450,15 +450,15 @@ export async function createRideBooking(input: {
 export async function updateBookingStatus(id: string, status: BookingStatus, actor: ActorContext) {
   const booking = await getBooking(id);
   if (!booking) {
-    throw new Error('Booking not found');
+    throw new Error('Không tìm thấy chuyến đi');
   }
 
   if (actor.role === 'customer') {
-    throw new Error('Unauthorized');
+    throw new Error('Không có quyền truy cập');
   }
 
   if (actor.role === 'driver' && booking.driverId !== actor.userId) {
-    throw new Error('Unauthorized');
+    throw new Error('Không có quyền truy cập');
   }
 
   const updatedAt = now();

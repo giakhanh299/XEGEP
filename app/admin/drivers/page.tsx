@@ -15,10 +15,10 @@ export default async function AdminDriversPage() {
           href="/admin/drivers/new"
           className="rounded-2xl bg-emerald-400 px-4 py-3 text-sm font-semibold text-slate-950"
         >
-          Create driver
+          Tạo tài xế
         </Link>
       </div>
-      <SectionCard title="Driver & vehicle management" description="Approve, update, activate, or archive driver records.">
+      <SectionCard title="Quản lý tài xế và xe" description="Duyệt, cập nhật, kích hoạt hoặc lưu trữ hồ sơ tài xế.">
         <AdminDriverManagement drivers={drivers} />
       </SectionCard>
     </div>
