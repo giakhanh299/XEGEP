@@ -1,16 +1,1 @@
-import { SectionCard } from '@/components/section-card';
-
-export default function AdminMapPage() {
-  return (
-    <SectionCard title="Bản đồ" description="Khung tạm Google Maps cho tối ưu tuyến trong tương lai.">
-      <div className="grid min-h-[420px] place-items-center rounded-[1.5rem] border border-dashed border-emerald-400/30 bg-slate-950/40 text-center text-slate-300">
-        <div className="max-w-sm space-y-3 p-8">
-          <p className="text-lg font-semibold text-white">Khu vực bản đồ đã được giữ chỗ</p>
-          <p className="text-sm leading-6">
-            Trang này sẵn sàng cho lớp phủ Google Maps, gom cụm tuyến và tối ưu thứ tự đón khách.
-          </p>
-        </div>
-      </div>
-    </SectionCard>
-  );
-}
+import { SectionCard } from '@/components/section-card';  export default function AdminMapPage() {   return (     <SectionCard title="Bản đồ" description="Khung tạm Google Maps cho tối ưu tuyến trong tương lai.">       <div className="grid min-h-[420px] place-items-center rounded-[1.5rem] border border-dashed border-emerald-400/30 bg-slate-950/40 text-center text-slate-300">         <div className="max-w-sm space-y-3 p-8">           <p className="text-lg font-semibold text-white">Khu vực bản đồ đã được giữ chỗ</p>           <p className="text-sm leading-6">             Trang này sẵn sàng cho lớp phủ Google Maps, gom cụm tuyến và tối ưu thứ tự đón khách.           </p>         </div>       </div>     </SectionCard>   ); }

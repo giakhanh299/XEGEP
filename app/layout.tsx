@@ -3,8 +3,8 @@ import type { ReactNode } from 'react';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Dai Loc Ride Share',
-  description: 'Shared taxi booking platform for Dai Loc and Da Nang routes.',
+  title: 'Xe Ghép Đại Lộc',
+  description: 'Nền tảng đặt xe ghép cho các tuyến Đại Lộc và Đà Nẵng.',
   manifest: '/manifest.json'
 };
 
@@ -14,7 +14,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="vi">
       <body>{children}</body>
     </html>
   );
