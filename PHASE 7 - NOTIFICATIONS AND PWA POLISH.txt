@@ -1,0 +1,40 @@
+PHASE 7 - NOTIFICATIONS AND PWA POLISH
+
+Improve app-like experience.
+
+Implement:
+1. Web push notifications
+2. Telegram notifications
+3. Install app prompt
+4. Offline fallback page
+5. Better mobile UX
+6. Loading states
+7. Empty states
+8. Error states
+
+Notifications:
+- New booking
+- Trip ready
+- Driver assigned
+- Driver on the way
+- Trip completed
+- Payment reminder
+
+PWA:
+- manifest
+- service worker
+- offline page
+- app icons
+- install prompt
+
+UI:
+- Bottom navigation for customer
+- Bottom navigation for driver
+- Admin responsive layout
+- Large buttons
+- Clear Vietnamese labels
+
+After implementation:
+- Run npm run build
+- Fix all errors
+- Create docs/PHASE7_PWA_NOTIFICATIONS.md

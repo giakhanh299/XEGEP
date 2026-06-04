@@ -1,0 +1,44 @@
+Build the initial foundation for a Dai Loc ↔ Da Nang shared ride PWA.
+
+Use:
+- Next.js App Router
+- TypeScript
+- Tailwind CSS
+- Supabase
+- PWA
+- Mobile-first UI
+
+Create:
+- Customer portal
+- Driver portal
+- Admin portal
+- Supabase schema
+- PWA manifest
+- Docs
+- .env.example
+
+Routes:
+/
+/customer
+/customer/book
+/customer/my-trips
+/driver
+/driver/trips
+/admin
+/admin/dashboard
+/admin/bookings
+/admin/trips
+/admin/drivers
+/admin/map
+
+Business:
+- Default price: 90,000 VND/passenger
+- Vehicle types: 4-seat, 7-seat
+- Route types:
+  - dai_loc_to_da_nang
+  - da_nang_to_dai_loc
+
+After implementation:
+- Run npm install
+- Run npm run build
+- Fix all errors until build succeeds

@@ -1,0 +1,49 @@
+PHASE 2 - OPERATIONAL MVP
+
+Transform the foundation into a real operating ride-sharing system.
+
+Implement:
+1. Booking management
+2. Trip management
+3. Vehicle CRUD
+4. Driver CRUD
+5. Admin dashboard
+6. Telegram notifications
+7. Basic Google Maps page
+8. Customer trip status
+9. Audit logs
+10. Supabase RLS policies
+
+Admin can:
+- Confirm booking
+- Reject booking
+- Assign booking to trip
+- Move booking between trips
+- Create trip
+- Assign driver
+- Assign vehicle
+- Force departure
+- Complete trip
+
+Booking statuses:
+- pending
+- confirmed
+- matching
+- driver_assigned
+- on_the_way
+- completed
+- cancelled
+
+Trip statuses:
+- draft
+- ready
+- boarding
+- in_progress
+- completed
+- cancelled
+
+After implementation:
+- Run npm install
+- Run npm run build
+- Fix all errors
+- Create docs/PHASE2_COMPLETE.md

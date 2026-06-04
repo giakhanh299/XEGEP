@@ -1,0 +1,34 @@
+PHASE 4 - GOOGLE MAPS ROUTE OPTIMIZATION
+
+Implement real Google Maps integration.
+
+Use:
+- Google Maps JavaScript API
+- Geocoding API
+- Distance Matrix API
+- Directions API
+
+Features:
+1. Address autocomplete
+2. Pickup/dropoff geocoding
+3. Display booking points on map
+4. Display trip route
+5. Optimize pickup order
+6. Estimate distance and duration
+7. Show route preview in admin
+
+Pages:
+- /customer/book with address autocomplete
+- /admin/map
+- /admin/trips/[id]/map
+
+Environment:
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=
+
+Fallback:
+If API key is missing, show mock map placeholder.
+
+After implementation:
+- Run npm run build
+- Fix all errors
+- Create docs/PHASE4_GOOGLE_MAPS.md

@@ -1,0 +1,22 @@
+import { NextResponse } from 'next/server';
+import { getSessionFromCookies } from '@/lib/auth/session';
+import { markNotificationRead } from '@/lib/services/notifications';
+
+export async function PATCH(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const session = await getSessionFromCookies();
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  if (session.role === 'admin' || session.role === 'super_admin') {
+    return NextResponse.json({ error: 'Use admin notifications endpoint' }, { status: 403 });
+  }
+
+  const { id } = await params;
+  const notification = await markNotificationRead(id, { userId: session.userId, role: session.role });
+  if (!notification) {
+    return NextResponse.json({ error: 'Notification not found' }, { status: 404 });
+  }
+
+  return NextResponse.json({ notification });
+}

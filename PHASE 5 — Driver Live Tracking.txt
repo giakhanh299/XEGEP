@@ -1,0 +1,42 @@
+PHASE 5 - DRIVER LIVE TRACKING
+
+Add real-time driver location tracking.
+
+Create table:
+driver_locations
+
+Fields:
+- id
+- driver_id
+- trip_id
+- lat
+- lng
+- accuracy
+- speed
+- heading
+- recorded_at
+
+Driver app:
+- Ask permission for GPS
+- Send location every 30 seconds
+- Show current assigned trip
+- Button: Start Sharing Location
+- Button: Stop Sharing Location
+
+Admin map:
+- Show live driver locations
+- Show active trips
+- Show pickup points
+- Show dropoff points
+
+Customer:
+- /customer/my-trips/[id]
+- Show driver location
+- Show estimated arrival
+
+Use Supabase Realtime if possible.
+
+After implementation:
+- Run npm run build
+- Fix all errors
+- Create docs/PHASE5_LIVE_TRACKING.md

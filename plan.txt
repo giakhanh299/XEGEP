@@ -1,0 +1,270 @@
+You are a senior full-stack engineer.
+
+Please add a complete Driver & Customer Account System to the existing Ride Booking platform.
+
+OBJECTIVE
+The platform must support two user roles:
+
+1. Driver
+2. Customer
+
+The goal is to allow drivers to create and manage their vehicle profiles, while customers can browse available vehicles, see driver information and vehicle photos, then book a ride directly.
+
+========================================
+1. AUTHENTICATION & USER ACCOUNTS
+========================================
+
+Implement registration and login functionality.
+
+Customer registration fields:
+- Username
+- Full name
+- Phone number
+- Address
+- Password
+
+Driver registration fields:
+- Username
+- Driver name
+- Phone number
+- Vehicle type
+- Vehicle plate number
+- Seat count
+- Service area
+- Vehicle photo
+- Driver photo
+- Short description
+- Password
+
+Requirements:
+- Secure password hashing
+- Session or token-based authentication
+- Role-based access control (Driver / Customer)
+
+========================================
+2. DRIVER PROFILE MANAGEMENT
+========================================
+
+Create a Driver Profile page where drivers can:
+
+- Update personal information
+- Update vehicle information
+- Upload vehicle images
+- Upload driver avatar/profile image
+- Update service area
+- Update vehicle description
+
+Store all driver information in the existing database.
+
+If the project currently has no database:
+- Analyze the current architecture
+- Create the minimum database structure required
+- Use the simplest solution that fits the current stack
+
+========================================
+3. VEHICLE SELECTION PAGE
+========================================
+
+On the vehicle selection screen, display all available drivers and vehicles.
+
+Each vehicle card should display:
+
+- Vehicle photo
+- Driver photo
+- Driver name
+- Vehicle type
+- Vehicle plate number
+- Number of seats
+- Service area
+- Driver rating (placeholder if not available)
+- "Book Now" button
+
+The UI should be mobile-friendly and visually attractive.
+
+If no image exists:
+- Display a default placeholder image
+
+========================================
+4. CUSTOMER PROFILE
+========================================
+
+Customers must be able to store:
+
+- Username
+- Full name
+- Phone number
+- Address
+
+When creating a booking, customer information should automatically populate from their account.
+
+Customers should not need to re-enter their information every time.
+
+========================================
+5. BOOKING SYSTEM
+========================================
+
+When a customer clicks "Book Now":
+
+Automatically load:
+
+- Customer name
+- Customer phone number
+- Customer address
+
+Customer only needs to provide:
+
+- Pickup location
+- Destination
+- Travel date/time
+- Notes
+
+Create a booking record containing:
+
+- booking_id
+- customer_id
+- driver_id
+- customer snapshot information
+- driver snapshot information
+- vehicle snapshot information
+- pickup location
+- destination
+- booking time
+- booking status
+
+Booking statuses:
+
+- pending
+- accepted
+- cancelled
+- completed
+
+========================================
+6. DRIVER BOOKING DASHBOARD
+========================================
+
+Drivers should be able to:
+
+- View incoming bookings
+- Accept bookings
+- Reject bookings
+- Mark bookings as completed
+
+Customers should be able to:
+
+- View booking history
+- Track booking status
+
+========================================
+7. DATABASE DESIGN
+========================================
+
+Create or update schemas for:
+
+Users
+- id
+- username
+- password_hash
+- role
+- created_at
+
+Customers
+- user_id
+- full_name
+- phone
+- address
+
+Drivers
+- user_id
+- driver_name
+- phone
+- vehicle_type
+- plate_number
+- seat_count
+- service_area
+- vehicle_photo
+- driver_photo
+- description
+
+Bookings
+- id
+- customer_id
+- driver_id
+- pickup_location
+- destination
+- booking_time
+- notes
+- status
+- created_at
+
+========================================
+8. SECURITY
+========================================
+
+Requirements:
+
+- Never store plain text passwords
+- Validate all forms
+- Prevent customers from editing driver profiles
+- Prevent drivers from editing other drivers' profiles
+- Prevent unauthorized booking access
+- Protect upload endpoints
+- Sanitize user input
+
+========================================
+9. UI / UX
+========================================
+
+Keep the current UI intact.
+
+Only extend existing functionality.
+
+Requirements:
+- Responsive design
+- Mobile-first layout
+- Clean vehicle cards
+- Professional booking flow
+- Clear call-to-action buttons
+
+========================================
+10. FILE UPLOADS
+========================================
+
+Support:
+
+- Driver photo upload
+- Vehicle photo upload
+
+If running on Cloudflare:
+
+Preferred architecture:
+- Cloudflare D1 for database
+- Cloudflare R2 for image storage
+
+If R2 is not configured:
+- Implement image URL support first
+- Add TODO comments for future R2 integration
+
+========================================
+11. IMPLEMENTATION PROCESS
+========================================
+
+Before making changes:
+
+1. Analyze the existing codebase
+2. Identify the current tech stack
+3. Explain the current architecture
+4. Propose the least disruptive implementation plan
+5. Implement the feature
+6. Run build/tests/lint if available
+7. Provide a summary including:
+   - Files modified
+   - Database changes
+   - New routes/pages/components
+   - How to test the feature
+
+IMPORTANT:
+- Do not perform unnecessary refactoring.
+- Do not rename existing routes unless absolutely necessary.
+- Preserve existing functionality.
+- Deliver a working MVP first.
+- Make reasonable assumptions when information is missing and clearly document them.

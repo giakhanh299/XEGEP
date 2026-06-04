@@ -1,0 +1,53 @@
+PHASE 3 - AI DISPATCH SYSTEM
+
+Add AI-ready dispatching logic for shared rides.
+
+Goal:
+Automatically group passengers into optimized trips.
+
+Implement:
+1. Booking grouping engine
+2. Vehicle suggestion engine
+3. Pickup order optimization
+4. Trip score calculation
+5. Departure recommendation
+6. Demand prediction placeholder
+
+Create:
+lib/ai/dispatchEngine.ts
+lib/ai/routeOptimizer.ts
+lib/ai/demandPredictor.ts
+
+Functions:
+- groupBookingsIntoTrips(bookings)
+- suggestVehicleType(passengerCount)
+- optimizePickupOrder(bookings)
+- calculateTripScore(trip)
+- recommendDepartureTime(bookings)
+- predictRouteDemand(routeType, dateTime)
+
+Rules:
+- 4-seat vehicle max 4 passengers
+- 7-seat vehicle max 7 passengers
+- Prefer grouping passengers with similar route and time
+- Avoid pickup routes that are too far apart
+- Admin can accept or reject AI suggestion
+
+Admin page:
+- /admin/ai-dispatch
+
+Show:
+- suggested trips
+- passenger list
+- suggested vehicle
+- estimated revenue
+- estimated route efficiency
+- accept suggestion button
+
+Do not call paid AI API yet.
+Use deterministic logic first.
+
+After implementation:
+- Run npm run build
+- Fix all errors
+- Create docs/PHASE3_AI_DISPATCH.md

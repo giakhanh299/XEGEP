@@ -1,0 +1,46 @@
+PHASE 6 - PAYMENTS AND REVENUE
+
+Add payment tracking and revenue management.
+
+Do not integrate real payment gateway yet.
+
+Implement:
+1. Cash payment
+2. Bank transfer
+3. QR payment placeholder
+4. Payment status
+5. Driver payout tracking
+6. Revenue reports
+
+Create tables:
+payments
+driver_payouts
+
+Payment statuses:
+- unpaid
+- pending
+- paid
+- refunded
+- cancelled
+
+Payment methods:
+- cash
+- bank_transfer
+- qr_code
+
+Admin:
+- Mark booking as paid
+- View daily revenue
+- View monthly revenue
+- View unpaid bookings
+- Export revenue CSV
+
+Customer:
+- See payment amount
+- See payment method
+- See payment status
+
+After implementation:
+- Run npm run build
+- Fix all errors
+- Create docs/PHASE6_PAYMENTS.md

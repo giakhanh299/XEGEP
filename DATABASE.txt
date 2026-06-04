@@ -1,0 +1,495 @@
+Build a production-ready foundation for a Ride Sharing / Shared Taxi Web App (PWA) focused on local routes such as:
+
+- Dai Loc → Da Nang
+- Da Nang → Dai Loc
+
+Business model:
+- Shared rides.
+- Default price: 90,000 VND per passenger.
+- Vehicle types:
+  - 4-seat vehicle
+  - 7-seat vehicle
+- Admin can manually create trips.
+- Future AI agents will automatically group passengers and optimize routes.
+
+The goal is to create a modern Web App that behaves like a mobile application without building native Android/iOS apps.
+
+====================================================
+TECH STACK
+====================================================
+
+Use:
+
+- Next.js 15+
+- App Router
+- TypeScript
+- Tailwind CSS
+- Supabase
+- PWA support
+- Cloudflare-compatible deployment structure
+- Clean architecture
+- Scalable for future AI agents
+
+====================================================
+PROJECT STRUCTURE
+====================================================
+
+Create a clean project structure:
+
+/app
+/components
+/lib
+/lib/ai
+/lib/maps
+/lib/telegram
+/lib/supabase
+/types
+/database
+/public
+/docs
+
+====================================================
+USER ROLES
+====================================================
+
+Support 3 roles:
+
+1. Customer
+2. Driver
+3. Admin
+
+====================================================
+ROUTES
+====================================================
+
+Create pages:
+
+/
+/customer
+/customer/book
+/customer/my-trips
+
+/driver
+/driver/trips
+
+/admin
+/admin/dashboard
+/admin/bookings
+/admin/trips
+/admin/drivers
+/admin/map
+
+====================================================
+CUSTOMER FEATURES
+====================================================
+
+Booking form:
+
+Fields:
+
+- Full Name
+- Phone Number
+- Pickup Location
+- Dropoff Location
+- Travel Date
+- Travel Time
+- Number of Passengers
+- Notes
+
+Store bookings in Supabase.
+
+Booking statuses:
+
+- pending
+- matching
+- confirmed
+- driver_assigned
+- on_the_way
+- completed
+- cancelled
+
+Customer dashboard:
+
+Show:
+
+- Current booking
+- Status
+- Trip details
+- Assigned driver (future)
+- Vehicle information
+
+====================================================
+DRIVER FEATURES
+====================================================
+
+Driver dashboard:
+
+View assigned trips.
+
+Show:
+
+- Passenger count
+- Pickup points
+- Dropoff points
+- Vehicle assigned
+
+Actions:
+
+- Accept Trip
+- Start Pickup
+- Passenger Picked Up
+- Complete Trip
+
+====================================================
+ADMIN FEATURES
+====================================================
+
+Admin dashboard:
+
+Metrics:
+
+- Total Bookings
+- Active Trips
+- Completed Trips
+- Revenue
+
+Bookings page:
+
+- View bookings
+- Edit bookings
+- Change status
+
+Trips page:
+
+- Create trip manually
+- Combine bookings into a trip
+- Assign driver
+- Assign vehicle
+- Change trip status
+
+Drivers page:
+
+- Manage drivers
+
+Map page:
+
+Create a Google Maps placeholder page for future route optimization.
+
+====================================================
+SUPABASE DATABASE
+====================================================
+
+Create:
+
+database/schema.sql
+
+Tables:
+
+users
+drivers
+vehicles
+bookings
+trips
+trip_bookings
+route_points
+notifications
+
+====================================================
+TABLE DESIGN
+====================================================
+
+bookings:
+
+- id
+- customer_name
+- phone
+- pickup_location
+- dropoff_location
+- pickup_lat
+- pickup_lng
+- dropoff_lat
+- dropoff_lng
+- passenger_count
+- notes
+- status
+- route_type
+- trip_id
+- created_at
+- updated_at
+
+trips:
+
+- id
+- route_type
+- vehicle_id
+- driver_id
+- passenger_count
+- max_capacity
+- trip_status
+- estimated_departure
+- actual_departure
+- estimated_arrival
+- completed_at
+- total_revenue
+- created_at
+
+vehicles:
+
+- id
+- plate_number
+- vehicle_type
+- capacity
+- active
+
+drivers:
+
+- id
+- full_name
+- phone
+- active
+
+====================================================
+BUSINESS RULES
+====================================================
+
+Implement utility functions:
+
+calculateTripRevenue()
+
+suggestVehicleType()
+
+isTripReady()
+
+Trip Rules:
+
+- 4-seat vehicle max = 4 passengers
+- 7-seat vehicle max = 7 passengers
+- Route types:
+  - dai_loc_to_da_nang
+  - da_nang_to_dai_loc
+
+Trip becomes READY when:
+
+- Capacity reached
+OR
+- Admin forces departure
+
+====================================================
+AI-READY ARCHITECTURE
+====================================================
+
+Create:
+
+lib/ai/routeOptimizer.ts
+
+Implement placeholders:
+
+groupBookingsIntoTrips()
+
+optimizePickupOrder()
+
+estimateTripScore()
+
+predictDemand()
+
+IMPORTANT:
+
+Do NOT connect to OpenAI yet.
+
+Create clean interfaces and TODO comments for future AI integration.
+
+====================================================
+GOOGLE MAPS READY
+====================================================
+
+Create:
+
+lib/maps/googleMaps.ts
+
+Functions:
+
+geocodeAddress()
+
+calculateDistanceMatrix()
+
+getOptimizedRoute()
+
+Use:
+
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+
+Do not require a real API key.
+
+Use mock implementations.
+
+====================================================
+TELEGRAM READY
+====================================================
+
+Create:
+
+lib/telegram/notify.ts
+
+Functions:
+
+notifyNewBooking()
+
+notifyTripReady()
+
+notifyDriverAssigned()
+
+Environment variables:
+
+TELEGRAM_BOT_TOKEN
+TELEGRAM_ADMIN_CHAT_ID
+
+If env vars are missing:
+
+log to console instead of failing.
+
+====================================================
+PWA REQUIREMENTS
+====================================================
+
+Implement:
+
+- manifest.json
+- icons placeholders
+- service worker setup
+- installable app
+- mobile-first experience
+
+App Name:
+
+"Dai Loc Ride Share"
+
+Short Name:
+
+"DaiLocRide"
+
+Theme:
+
+Modern transportation app
+
+====================================================
+UI DESIGN
+====================================================
+
+Design principles:
+
+- Mobile first
+- Large touch-friendly buttons
+- Clean layout
+- Fast loading
+- Similar feel to Uber/Grab/Lyft
+
+Customer navigation:
+
+Bottom Navigation:
+
+- Home
+- Book Ride
+- My Trips
+- Profile
+
+Admin:
+
+Sidebar navigation
+
+====================================================
+SUPABASE
+====================================================
+
+Create:
+
+lib/supabase/client.ts
+
+lib/supabase/server.ts
+
+Environment variables:
+
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+
+====================================================
+DOCUMENTATION
+====================================================
+
+Create:
+
+docs/ARCHITECTURE.md
+
+docs/DATABASE.md
+
+docs/ROADMAP.md
+
+docs/DEPLOYMENT.md
+
+docs/SUPABASE_SETUP.md
+
+====================================================
+ENVIRONMENT FILE
+====================================================
+
+Create:
+
+.env.example
+
+with:
+
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=
+
+TELEGRAM_BOT_TOKEN=
+TELEGRAM_ADMIN_CHAT_ID=
+
+====================================================
+CLOUDFLARE DEPLOYMENT
+====================================================
+
+Prepare the project for:
+
+- Cloudflare Pages
+OR
+- Cloudflare Workers via OpenNext
+
+Include deployment instructions.
+
+====================================================
+IMPORTANT
+====================================================
+
+After implementation:
+
+1. Install dependencies.
+2. Run build.
+3. Fix all TypeScript errors.
+4. Fix all lint errors.
+5. Ensure successful production build.
+6. Do not stop if build fails.
+7. Continue fixing until build succeeds.
+
+Finally provide:
+
+- Full project structure
+- Database schema summary
+- Setup instructions
+- Local development instructions
+- Deployment instructions
+- Recommended next steps
+
+Future roadmap should support:
+
+- AI ride matching
+- Route optimization
+- Real-time driver tracking
+- Google Maps integration
+- Push notifications
+- QR payments
+- Dynamic pricing
+- Demand forecasting
+- Multi-city expansion
