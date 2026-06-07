@@ -61,5 +61,5 @@ export function listDriverPayouts() {
 }
 
 export function describePaymentMethod(method: PaymentMethod) {
-  return method === 'cash' ? 'Cash' : method === 'bank_transfer' ? 'Bank transfer' : 'QR payment';
+  return method === 'cash' ? 'Tiền mặt' : method === 'bank_transfer' ? 'Chuyển khoản' : 'Thanh toán QR';
 }

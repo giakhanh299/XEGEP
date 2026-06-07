@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { SectionCard } from '@/components/section-card';
 import { StatusBadge } from '@/components/status-badge';
 import { getLatestBookingStatusLabel } from '@/lib/booking-history';
+import { formatBookingStatus } from '@/lib/display-labels';
 import { getSessionFromCookies } from '@/lib/auth/session';
 import { getCustomerDashboardBookings } from '@/lib/services/rides';
 
@@ -21,7 +22,7 @@ export default async function CustomerTripsPage() {
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                 <p className="font-semibold text-white">
-                  {booking.pickupLocation} to {booking.dropoffLocation}
+                  {booking.pickupLocation} → {booking.dropoffLocation}
                 </p>
                 <p className="text-sm text-slate-400">{booking.bookingTime ?? booking.createdAt}</p>
                 <p className="text-xs text-slate-500">
@@ -38,7 +39,7 @@ export default async function CustomerTripsPage() {
                   <strong className="text-white">Tài xế:</strong> {booking.driverSnapshot?.driverName ?? 'Đang chờ phân công'}
                 </p>
                 <p className="sm:col-span-2">
-                  <strong className="text-white">Cập nhật gần nhất:</strong> {latestUpdate.status} lúc {latestUpdate.timestamp}
+                  <strong className="text-white">Cập nhật gần nhất:</strong> {formatBookingStatus(latestUpdate.status)} lúc {latestUpdate.timestamp}
                 </p>
               </div>
               <Link href={`/customer/my-trips/${booking.id}`} className="mt-4 inline-flex text-sm font-semibold text-emerald-300">

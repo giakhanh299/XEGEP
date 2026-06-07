@@ -1,19 +1,20 @@
 import { NextResponse } from 'next/server';
-import { createSessionCookieValue } from '@/lib/auth/session';
+import { setSessionCookie } from '@/lib/auth/session';
 import { registerAccount } from '@/lib/services/accounts';
 import {
+  validateLoginIdentifier,
   validateNonEmpty,
   validatePassword,
   validatePhoneNumber,
   validateSeatCount,
-  validateUserRole,
-  validateUsername
+  validateUserRole
 } from '@/lib/validation';
 
 function publicUser(user: { id: string; username: string; role: string; createdAt: string }) {
   return {
     id: user.id,
     username: user.username,
+    email: user.username,
     role: user.role,
     createdAt: user.createdAt
   };
@@ -23,13 +24,19 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const role = String(body.role ?? '').trim();
-    const username = String(body.username ?? '').trim();
+    const username = String(body.email ?? body.username ?? '').trim().toLowerCase();
     const password = String(body.password ?? '');
     const phone = String(body.phone ?? '').trim();
     const customerFullName = String(body.fullName ?? '').trim();
     const driverName = String(body.driverName ?? '').trim();
 
-    if (!validateUserRole(role) || !validateUsername(username) || !validatePassword(password) || !validatePhoneNumber(phone)) {
+    if (
+      !validateUserRole(role) ||
+      (role !== 'customer' && role !== 'driver') ||
+      !validateLoginIdentifier(username) ||
+      !validatePassword(password) ||
+      !validatePhoneNumber(phone)
+    ) {
       return NextResponse.json({ error: 'Dữ liệu đăng ký không hợp lệ' }, { status: 400 });
     }
 
@@ -74,22 +81,12 @@ export async function POST(request: Request) {
       driver: bundle.driver ?? null
     });
 
-    response.cookies.set(
-      'ride_session',
-      createSessionCookieValue({
-        userId: bundle.user.id,
-        username: bundle.user.username,
-        role: bundle.user.role,
-        issuedAt: Date.now()
-      }),
-      {
-        httpOnly: true,
-        sameSite: 'lax',
-        secure: process.env.NODE_ENV === 'production',
-        path: '/',
-        maxAge: 60 * 60 * 24 * 14
-      }
-    );
+    setSessionCookie(response, {
+      userId: bundle.user.id,
+      username: bundle.user.username,
+      role: bundle.user.role,
+      issuedAt: Date.now()
+    }, request);
 
     return response;
   } catch (error) {

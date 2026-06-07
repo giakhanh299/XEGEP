@@ -1,1 +1,41 @@
-import { SectionCard } from '@/components/section-card'; import { mockDriverPayouts, mockPayments } from '@/lib/mock-data'; import { describePaymentMethod, listDriverPayouts, summarizeRevenue } from '@/lib/payments/payments';  export default function AdminPaymentsPage() {   const summary = summarizeRevenue();   const payoutCount = listDriverPayouts().length + mockDriverPayouts.length;    return (     <div className="grid gap-4">       <SectionCard title="Tổng quan doanh thu" description="Khung tạm cho doanh thu theo ngày và theo tháng.">         <div className="grid gap-3 md:grid-cols-3">           <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-slate-200">             Tổng đã thu: {summary.totalPaid}           </div>           <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-slate-200">             Tổng chưa thu: {summary.totalUnpaid}           </div>           <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-slate-200">             Chi trả tài xế: {payoutCount}           </div>         </div>       </SectionCard>        <SectionCard title="Thanh toán" description="Theo dõi trạng thái thanh toán theo từng chuyến đi.">         <div className="space-y-3">           {mockPayments.map((payment) => (             <div key={payment.id} className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-slate-300">               <p className="text-white">Chuyến {payment.bookingId}</p>               <p>                 Số tiền: {payment.amount} qua {describePaymentMethod(payment.method)}               </p>               <p>Trạng thái: {payment.status}</p>             </div>           ))}         </div>       </SectionCard>     </div>   ); }
+import { SectionCard } from '@/components/section-card';
+import { mockDriverPayouts, mockPayments } from '@/lib/mock-data';
+import { formatPaymentStatus } from '@/lib/display-labels';
+import { describePaymentMethod, listDriverPayouts, summarizeRevenue } from '@/lib/payments/payments';
+
+export default function AdminPaymentsPage() {
+  const summary = summarizeRevenue();
+  const payoutCount = listDriverPayouts().length + mockDriverPayouts.length;
+
+  return (
+    <div className="grid gap-4">
+      <SectionCard title="Tổng quan doanh thu" description="Khung tạm cho doanh thu theo ngày và theo tháng.">
+        <div className="grid gap-3 md:grid-cols-3">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-slate-200">
+            Tổng đã thu: {summary.totalPaid}
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-slate-200">
+            Tổng chưa thu: {summary.totalUnpaid}
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-slate-200">
+            Chi trả tài xế: {payoutCount}
+          </div>
+        </div>
+      </SectionCard>
+
+      <SectionCard title="Thanh toán" description="Theo dõi trạng thái thanh toán theo từng chuyến đi.">
+        <div className="space-y-3">
+          {mockPayments.map((payment) => (
+            <div key={payment.id} className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-slate-300">
+              <p className="text-white">Chuyến {payment.bookingId}</p>
+              <p>
+                Số tiền: {payment.amount} qua {describePaymentMethod(payment.method)}
+              </p>
+              <p>Trạng thái: {formatPaymentStatus(payment.status)}</p>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+    </div>
+  );
+}

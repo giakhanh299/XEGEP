@@ -4,11 +4,11 @@ import { requireAdminApiSession } from '@/lib/auth/admin';
 import { listAllDriversAdmin, registerAccount } from '@/lib/services/accounts';
 import {
   validateApprovalStatus,
+  validateLoginIdentifier,
   validateNonEmpty,
   validatePassword,
   validatePhoneNumber,
-  validateSeatCount,
-  validateUsername
+  validateSeatCount
 } from '@/lib/validation';
 
 export async function GET() {
@@ -32,9 +32,10 @@ export async function POST(request: Request) {
     const approvalStatus = String(body.approvalStatus ?? 'pending');
     const active = body.active === true || String(body.active ?? '').toLowerCase() === 'true';
     const driverName = String(body.driverName ?? body.fullName ?? '').trim();
+    const email = String(body.email ?? body.username ?? '').trim().toLowerCase();
 
     if (
-      !validateUsername(String(body.username ?? '')) ||
+      !validateLoginIdentifier(email) ||
       !validatePassword(String(body.password ?? '')) ||
       !validateNonEmpty(driverName) ||
       !validatePhoneNumber(String(body.phone ?? '')) ||
@@ -49,7 +50,7 @@ export async function POST(request: Request) {
 
     const bundle = await registerAccount({
       role: 'driver',
-      username: String(body.username),
+      username: email,
       password: String(body.password),
       fullName: driverName,
       phone: String(body.phone),
@@ -78,7 +79,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ driver: bundle.driver ?? null }, { status: 201 });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Không thể tạo tài xế';
-    const status = message.toLowerCase().includes('username already exists') ? 409 : 400;
-    return NextResponse.json({ error: message }, { status });
+    const isDuplicateUsername = message.toLowerCase().includes('account already exists');
+    const status = isDuplicateUsername ? 409 : 400;
+    return NextResponse.json({ error: isDuplicateUsername ? 'Tên đăng nhập đã tồn tại' : message }, { status });
   }
 }

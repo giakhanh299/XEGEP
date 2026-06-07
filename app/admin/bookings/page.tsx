@@ -3,6 +3,7 @@ import { SectionCard } from '@/components/section-card';
 import { StatusBadge } from '@/components/status-badge';
 import { AdminActionButton } from '@/components/admin/action-buttons';
 import { getLatestBookingStatusLabel } from '@/lib/booking-history';
+import { formatBookingStatus } from '@/lib/display-labels';
 import { listBookings } from '@/lib/services/rides';
 
 const bookingStatuses = ['confirmed', 'matching', 'driver_assigned', 'on_the_way', 'completed', 'cancelled'] as const;
@@ -22,9 +23,9 @@ export default async function AdminBookingsPage() {
                 <div>
                   <p className="font-semibold text-white">{booking.customerName}</p>
                   <p className="text-sm text-slate-400">
-                    {booking.pickupLocation} to {booking.dropoffLocation}
+                    {booking.pickupLocation} → {booking.dropoffLocation}
                   </p>
-                  <p className="mt-1 text-xs text-slate-500">Cập nhật gần nhất: {latestUpdate.status}</p>
+                  <p className="mt-1 text-xs text-slate-500">Cập nhật gần nhất: {formatBookingStatus(latestUpdate.status)}</p>
                 </div>
                 <StatusBadge status={booking.status} />
               </div>
@@ -32,7 +33,7 @@ export default async function AdminBookingsPage() {
                 {bookingStatuses.map((status) => (
                   <AdminActionButton
                     key={status}
-                    label={status.replace('_', ' ')}
+                    label={formatBookingStatus(status)}
                     endpoint={`/api/admin/bookings/${booking.id}`}
                     payload={{ status }}
                   />

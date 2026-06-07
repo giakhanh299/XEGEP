@@ -1,12 +1,13 @@
 import { NextResponse } from 'next/server';
-import { createSessionCookieValue } from '@/lib/auth/session';
+import { setSessionCookie } from '@/lib/auth/session';
 import { authenticateAccount } from '@/lib/services/accounts';
-import { validatePassword, validateUsername } from '@/lib/validation';
+import { validateLoginIdentifier, validatePassword } from '@/lib/validation';
 
 function publicUser(user: { id: string; username: string; role: string; createdAt: string }) {
   return {
     id: user.id,
     username: user.username,
+    email: user.username,
     role: user.role,
     createdAt: user.createdAt
   };
@@ -15,10 +16,10 @@ function publicUser(user: { id: string; username: string; role: string; createdA
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const username = String(body.username ?? '').trim();
+    const username = String(body.email ?? body.username ?? '').trim().toLowerCase();
     const password = String(body.password ?? '');
 
-    if (!validateUsername(username) || !validatePassword(password)) {
+    if (!validateLoginIdentifier(username) || !validatePassword(password)) {
       return NextResponse.json({ error: 'Thông tin đăng nhập không hợp lệ' }, { status: 400 });
     }
 
@@ -33,18 +34,12 @@ export async function POST(request: Request) {
       driver: bundle.driver ?? null
     });
 
-    response.cookies.set('ride_session', createSessionCookieValue({
+    setSessionCookie(response, {
       userId: bundle.user.id,
       username: bundle.user.username,
       role: bundle.user.role,
       issuedAt: Date.now()
-    }), {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
-      path: '/',
-      maxAge: 60 * 60 * 24 * 14
-    });
+    }, request);
 
     return response;
   } catch {

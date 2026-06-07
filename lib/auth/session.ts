@@ -1,8 +1,10 @@
 import { createHmac, timingSafeEqual } from 'crypto';
 import { cookies } from 'next/headers';
+import type { NextResponse } from 'next/server';
 import { UserRole } from '@/lib/types';
 
 const SESSION_COOKIE = 'ride_session';
+const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 14;
 
 export type SessionPayload = {
   userId: string;
@@ -77,4 +79,37 @@ export function createSessionCookieValue(payload: SessionPayload) {
 
 export function getSessionCookieName() {
   return SESSION_COOKIE;
+}
+
+function shouldUseSecureCookie(request?: Request) {
+  if (process.env.NODE_ENV !== 'production') {
+    return false;
+  }
+
+  if (!request) {
+    return true;
+  }
+
+  const hostname = new URL(request.url).hostname;
+  return hostname !== 'localhost' && hostname !== '127.0.0.1' && hostname !== '::1';
+}
+
+export function setSessionCookie(response: NextResponse, payload: SessionPayload, request?: Request) {
+  response.cookies.set(SESSION_COOKIE, createSessionCookieValue(payload), {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: shouldUseSecureCookie(request),
+    path: '/',
+    maxAge: SESSION_MAX_AGE_SECONDS
+  });
+}
+
+export function clearSessionCookie(response: NextResponse, request?: Request) {
+  response.cookies.set(SESSION_COOKIE, '', {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: shouldUseSecureCookie(request),
+    path: '/',
+    maxAge: 0
+  });
 }

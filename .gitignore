@@ -3,3 +3,5 @@ node_modules/
 .open-next/
 .env
 .env.local
+runtime/
+tsconfig.tsbuildinfo

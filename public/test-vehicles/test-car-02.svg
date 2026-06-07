@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">TEST vehicle placeholder 02</title>
+  <desc id="desc">Simple generated placeholder image for a demo 7-seat test car.</desc>
+  <rect width="960" height="540" fill="#111827"/>
+  <rect x="72" y="72" width="816" height="396" rx="28" fill="#166534"/>
+  <path d="M214 322h532l-42-112c-13-34-45-56-81-56H366c-36 0-69 23-81 57l-71 111Z" fill="#86efac"/>
+  <path d="M352 214h126v82H304l48-82Zm172 0h94c20 0 37 12 44 31l20 51H524v-82Z" fill="#052e16"/>
+  <rect x="180" y="300" width="600" height="96" rx="32" fill="#f0fdf4"/>
+  <circle cx="308" cy="398" r="56" fill="#020617"/>
+  <circle cx="308" cy="398" r="25" fill="#94a3b8"/>
+  <circle cx="648" cy="398" r="56" fill="#020617"/>
+  <circle cx="648" cy="398" r="25" fill="#94a3b8"/>
+  <text x="480" y="108" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#f0fdf4">TEST CAR 02</text>
+  <text x="480" y="454" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#052e16">TEST-002</text>
+</svg>

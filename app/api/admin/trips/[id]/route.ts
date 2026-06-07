@@ -14,7 +14,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   const success = await updateTrip(id, body);
 
   if (!success) {
-    return NextResponse.json({ error: 'Trip not found' }, { status: 404 });
+    return NextResponse.json({ error: 'Không tìm thấy lượt chạy' }, { status: 404 });
   }
 
   recordAuditLog({

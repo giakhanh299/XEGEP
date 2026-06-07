@@ -17,6 +17,7 @@ function publicUser(user: SafeUser | null) {
     ? {
         id: user.id,
         username: user.username,
+        email: user.username,
         role: user.role,
         createdAt: user.createdAt,
         fullName: user.fullName,

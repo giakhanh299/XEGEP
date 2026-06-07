@@ -1,1 +1,328 @@
-'use client';  import { ChangeEvent, FormEvent, useState } from 'react'; import { useRouter } from 'next/navigation'; import type { DriverProfileRecord } from '@/lib/types';  type FormState = {   username: string;   password: string;   driverName: string;   phone: string;   vehicleType: DriverProfileRecord['vehicleType'];   plateNumber: string;   seatCount: 4 | 7;   serviceArea: string;   driverPhoto: string;   vehiclePhoto: string;   description: string;   approvalStatus: DriverProfileRecord['approvalStatus'];   active: boolean; };  const initialFormState: FormState = {   username: '',   password: '',   driverName: '',   phone: '',   vehicleType: '4-seat vehicle',   plateNumber: '',   seatCount: 4,   serviceArea: '',   driverPhoto: '',   vehiclePhoto: '',   description: '',   approvalStatus: 'pending',   active: false };  export function AdminDriverCreateForm() {   const router = useRouter();   const [form, setForm] = useState<FormState>(initialFormState);   const [message, setMessage] = useState<string | null>(null);   const [submitting, setSubmitting] = useState(false);   const [uploading, setUploading] = useState<'driver' | 'vehicle' | null>(null);   const [previewDriverPhoto, setPreviewDriverPhoto] = useState<string>('');   const [previewVehiclePhoto, setPreviewVehiclePhoto] = useState<string>('');    function updateField<K extends keyof FormState>(key: K, value: FormState[K]) {     setForm((current) => ({ ...current, [key]: value }));   }    async function uploadImage(file: File, kind: 'driver' | 'vehicle') {     const formData = new FormData();     formData.append('file', file);     formData.append('kind', kind);      const response = await fetch('/api/uploads', {       method: 'POST',       body: formData     });     const data = await response.json().catch(() => null);     if (!response.ok) {       throw new Error(data?.error ?? 'Tải ảnh thất bại');     }      return String(data.url ?? '');   }    function handleFileChange(kind: 'driver' | 'vehicle', event: ChangeEvent<HTMLInputElement>) {     const file = event.target.files?.[0];     if (!file) {       return;     }      const previousUrl = kind === 'driver' ? form.driverPhoto : form.vehiclePhoto;     const previewUrl = URL.createObjectURL(file);     if (kind === 'driver') {       setPreviewDriverPhoto(previewUrl);     } else {       setPreviewVehiclePhoto(previewUrl);     }      setUploading(kind);     void (async () => {       try {         const uploadedUrl = await uploadImage(file, kind);         updateField(kind === 'driver' ? 'driverPhoto' : 'vehiclePhoto', uploadedUrl);         if (kind === 'driver') {           setPreviewDriverPhoto(uploadedUrl);         } else {           setPreviewVehiclePhoto(uploadedUrl);         }       } catch (error) {         updateField(kind === 'driver' ? 'driverPhoto' : 'vehiclePhoto', previousUrl);         if (kind === 'driver') {           setPreviewDriverPhoto(previousUrl);         } else {           setPreviewVehiclePhoto(previousUrl);         }         setMessage(error instanceof Error ? error.message : 'Tải ảnh thất bại');       } finally {         URL.revokeObjectURL(previewUrl);         setUploading((current) => (current === kind ? null : current));       }     })();      event.target.value = '';   }    async function handleSubmit(event: FormEvent<HTMLFormElement>) {     event.preventDefault();     setSubmitting(true);     setMessage(null);      try {       const response = await fetch('/api/admin/drivers', {         method: 'POST',         headers: {           'Content-Type': 'application/json'         },         body: JSON.stringify({           username: form.username,           password: form.password,           driverName: form.driverName,           phone: form.phone,           vehicleType: form.vehicleType,           plateNumber: form.plateNumber,           seatCount: form.seatCount,           serviceArea: form.serviceArea,           driverPhoto: form.driverPhoto,           vehiclePhoto: form.vehiclePhoto,           description: form.description,           approvalStatus: form.approvalStatus,           active: form.active         })       });       const data = await response.json().catch(() => null);       if (!response.ok) {         throw new Error(data?.error ?? 'Không thể tạo tài xế');       }        setForm(initialFormState);       setPreviewDriverPhoto('');       setPreviewVehiclePhoto('');       setMessage('Đã tạo tài xế thành công.');       router.push('/admin/drivers');       router.refresh();     } catch (error) {       setMessage(error instanceof Error ? error.message : 'Không thể tạo tài xế');     } finally {       setSubmitting(false);     }   }    const driverPreview = previewDriverPhoto || form.driverPhoto;   const vehiclePreview = previewVehiclePhoto || form.vehiclePhoto;    return (     <form onSubmit={handleSubmit} className="space-y-5">       <div className="grid gap-4 sm:grid-cols-2">         <label className="space-y-2 text-sm">           <span className="text-slate-200">Tên đăng nhập</span>           <input             required             value={form.username}             onChange={(event) => updateField('username', event.target.value)}             className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none"           />         </label>         <label className="space-y-2 text-sm">           <span className="text-slate-200">Mật khẩu</span>           <input             required             type="password"             value={form.password}             onChange={(event) => updateField('password', event.target.value)}             className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none"           />         </label>         <label className="space-y-2 text-sm">           <span className="text-slate-200">Tên tài xế</span>           <input             required             value={form.driverName}             onChange={(event) => updateField('driverName', event.target.value)}             className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none"           />         </label>         <label className="space-y-2 text-sm">           <span className="text-slate-200">Số điện thoại</span>           <input             required             value={form.phone}             onChange={(event) => updateField('phone', event.target.value)}             className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none"           />         </label>         <label className="space-y-2 text-sm">           <span className="text-slate-200">Loại xe</span>           <select             value={form.vehicleType}             onChange={(event) => updateField('vehicleType', event.target.value as FormState['vehicleType'])}             className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none"           >             <option value="4-seat vehicle">Xe 4 chỗ</option>             <option value="7-seat vehicle">Xe 7 chỗ</option>           </select>         </label>         <label className="space-y-2 text-sm">           <span className="text-slate-200">Số ghế</span>           <select             value={String(form.seatCount)}             onChange={(event) => updateField('seatCount', Number(event.target.value) as 4 | 7)}             className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none"           >             <option value="4">4</option>             <option value="7">7</option>           </select>         </label>         <label className="space-y-2 text-sm">           <span className="text-slate-200">Biển số xe</span>           <input             required             value={form.plateNumber}             onChange={(event) => updateField('plateNumber', event.target.value)}             className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none"           />         </label>         <label className="space-y-2 text-sm">           <span className="text-slate-200">Khu vực hoạt động</span>           <input             required             value={form.serviceArea}             onChange={(event) => updateField('serviceArea', event.target.value)}             className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none"           />         </label>         <label className="space-y-2 text-sm">           <span className="text-slate-200">Trạng thái duyệt</span>           <select             value={form.approvalStatus}             onChange={(event) =>               updateField('approvalStatus', event.target.value as FormState['approvalStatus'])             }             className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none"           >             <option value="pending">Chờ xử lý</option>             <option value="approved">Đã duyệt</option>             <option value="rejected">Bị từ chối</option>           </select>         </label>       </div>        <label className="space-y-2 text-sm">         <span className="text-slate-200">Mô tả</span>         <textarea           rows={4}           value={form.description}           onChange={(event) => updateField('description', event.target.value)}           className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none"         />       </label>        <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-200">         <input           type="checkbox"           checked={form.active}           onChange={(event) => updateField('active', event.target.checked)}           className="h-4 w-4 rounded border-white/20 bg-slate-950/50 text-emerald-400"         />         Đang hoạt động       </label>        <div className="grid gap-4 md:grid-cols-2">         <div className="space-y-3">           <p className="text-sm font-medium text-slate-200">Ảnh tài xế</p>           <div className="overflow-hidden rounded-2xl border border-white/10 bg-slate-950/50">             {driverPreview ? (               <img src={driverPreview} alt="Driver preview" className="h-56 w-full object-cover" />             ) : (               <div className="flex h-56 items-center justify-center text-sm text-slate-400">Chưa có ảnh tài xế</div>             )}           </div>           <input             type="file"             accept="image/jpeg,image/png,image/webp"             onChange={(event) => handleFileChange('driver', event)}             className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-slate-300 file:mr-4 file:rounded-xl file:border-0 file:bg-cyan-400 file:px-4 file:py-2 file:font-semibold file:text-slate-950"           />         </div>          <div className="space-y-3">           <p className="text-sm font-medium text-slate-200">Ảnh xe</p>           <div className="overflow-hidden rounded-2xl border border-white/10 bg-slate-950/50">             {vehiclePreview ? (               <img src={vehiclePreview} alt="Vehicle preview" className="h-56 w-full object-cover" />             ) : (               <div className="flex h-56 items-center justify-center text-sm text-slate-400">Chưa có ảnh xe</div>             )}           </div>           <input             type="file"             accept="image/jpeg,image/png,image/webp"             onChange={(event) => handleFileChange('vehicle', event)}             className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-slate-300 file:mr-4 file:rounded-xl file:border-0 file:bg-emerald-400 file:px-4 file:py-2 file:font-semibold file:text-slate-950"           />         </div>       </div>        <div className="flex flex-wrap items-center gap-3">         <button           type="submit"           disabled={submitting || uploading !== null}           className="rounded-2xl bg-emerald-400 px-5 py-3 text-sm font-semibold text-slate-950 disabled:opacity-60"         >           {submitting ? 'Đang tạo...' : 'Tạo tài xế'}         </button>         {uploading ? <p className="text-sm text-slate-400">Đang tải ảnh {uploading}...</p> : null}       </div>        {message ? <p className="text-sm text-slate-300">{message}</p> : null}     </form>   ); }
+'use client';
+
+import { ChangeEvent, FormEvent, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { formatUploadKind } from '@/lib/display-labels';
+import type { DriverProfileRecord } from '@/lib/types';
+
+type FormState = {
+  email: string;
+  password: string;
+  driverName: string;
+  phone: string;
+  vehicleType: DriverProfileRecord['vehicleType'];
+  plateNumber: string;
+  seatCount: 4 | 7;
+  serviceArea: string;
+  driverPhoto: string;
+  vehiclePhoto: string;
+  description: string;
+  approvalStatus: DriverProfileRecord['approvalStatus'];
+  active: boolean;
+};
+
+const initialFormState: FormState = {
+  email: '',
+  password: '',
+  driverName: '',
+  phone: '',
+  vehicleType: '4-seat vehicle',
+  plateNumber: '',
+  seatCount: 4,
+  serviceArea: '',
+  driverPhoto: '',
+  vehiclePhoto: '',
+  description: '',
+  approvalStatus: 'pending',
+  active: false
+};
+
+export function AdminDriverCreateForm() {
+  const router = useRouter();
+  const [form, setForm] = useState<FormState>(initialFormState);
+  const [message, setMessage] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [uploading, setUploading] = useState<'driver' | 'vehicle' | null>(null);
+  const [previewDriverPhoto, setPreviewDriverPhoto] = useState<string>('');
+  const [previewVehiclePhoto, setPreviewVehiclePhoto] = useState<string>('');
+
+  function updateField<K extends keyof FormState>(key: K, value: FormState[K]) {
+    setForm((current) => ({ ...current, [key]: value }));
+  }
+
+  async function uploadImage(file: File, kind: 'driver' | 'vehicle') {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('kind', kind);
+
+    const response = await fetch('/api/uploads', {
+      method: 'POST',
+      body: formData
+    });
+    const data = await response.json().catch(() => null);
+    if (!response.ok) {
+      throw new Error(data?.error ?? 'Tải ảnh thất bại');
+    }
+
+    return String(data.url ?? '');
+  }
+
+  function handleFileChange(kind: 'driver' | 'vehicle', event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    const previousUrl = kind === 'driver' ? form.driverPhoto : form.vehiclePhoto;
+    const previewUrl = URL.createObjectURL(file);
+    if (kind === 'driver') {
+      setPreviewDriverPhoto(previewUrl);
+    } else {
+      setPreviewVehiclePhoto(previewUrl);
+    }
+
+    setUploading(kind);
+    void (async () => {
+      try {
+        const uploadedUrl = await uploadImage(file, kind);
+        updateField(kind === 'driver' ? 'driverPhoto' : 'vehiclePhoto', uploadedUrl);
+        if (kind === 'driver') {
+          setPreviewDriverPhoto(uploadedUrl);
+        } else {
+          setPreviewVehiclePhoto(uploadedUrl);
+        }
+      } catch (error) {
+        updateField(kind === 'driver' ? 'driverPhoto' : 'vehiclePhoto', previousUrl);
+        if (kind === 'driver') {
+          setPreviewDriverPhoto(previousUrl);
+        } else {
+          setPreviewVehiclePhoto(previousUrl);
+        }
+        setMessage(error instanceof Error ? error.message : 'Tải ảnh thất bại');
+      } finally {
+        URL.revokeObjectURL(previewUrl);
+        setUploading((current) => (current === kind ? null : current));
+      }
+    })();
+
+    event.target.value = '';
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSubmitting(true);
+    setMessage(null);
+
+    try {
+      const response = await fetch('/api/admin/drivers', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: form.email,
+          password: form.password,
+          driverName: form.driverName,
+          phone: form.phone,
+          vehicleType: form.vehicleType,
+          plateNumber: form.plateNumber,
+          seatCount: form.seatCount,
+          serviceArea: form.serviceArea,
+          driverPhoto: form.driverPhoto,
+          vehiclePhoto: form.vehiclePhoto,
+          description: form.description,
+          approvalStatus: form.approvalStatus,
+          active: form.active
+        })
+      });
+      const data = await response.json().catch(() => null);
+      if (!response.ok) {
+        throw new Error(data?.error ?? 'Không thể tạo tài xế');
+      }
+
+      setForm(initialFormState);
+      setPreviewDriverPhoto('');
+      setPreviewVehiclePhoto('');
+      setMessage('Đã tạo tài xế thành công.');
+      router.push('/admin/drivers');
+      router.refresh();
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Không thể tạo tài xế');
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  const driverPreview = previewDriverPhoto || form.driverPhoto;
+  const vehiclePreview = previewVehiclePhoto || form.vehiclePhoto;
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div className="grid gap-4 sm:grid-cols-2">
+        <label className="space-y-2 text-sm">
+          <span className="text-slate-200">Tên đăng nhập</span>
+          <input
+            required
+            type="email"
+            name="email"
+            autoComplete="email"
+            value={form.email}
+            onChange={(event) => updateField('email', event.target.value)}
+            className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none"
+          />
+        </label>
+        <label className="space-y-2 text-sm">
+          <span className="text-slate-200">Mật khẩu</span>
+          <input
+            required
+            type="password"
+            name="password"
+            autoComplete="new-password"
+            value={form.password}
+            onChange={(event) => updateField('password', event.target.value)}
+            className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none"
+          />
+        </label>
+        <label className="space-y-2 text-sm">
+          <span className="text-slate-200">Tên tài xế</span>
+          <input
+            required
+            value={form.driverName}
+            onChange={(event) => updateField('driverName', event.target.value)}
+            className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none"
+          />
+        </label>
+        <label className="space-y-2 text-sm">
+          <span className="text-slate-200">Số điện thoại</span>
+          <input
+            required
+            value={form.phone}
+            onChange={(event) => updateField('phone', event.target.value)}
+            className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none"
+          />
+        </label>
+        <label className="space-y-2 text-sm">
+          <span className="text-slate-200">Loại xe</span>
+          <select
+            value={form.vehicleType}
+            onChange={(event) => updateField('vehicleType', event.target.value as FormState['vehicleType'])}
+            className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none"
+          >
+            <option value="4-seat vehicle">Xe 4 chỗ</option>
+            <option value="7-seat vehicle">Xe 7 chỗ</option>
+          </select>
+        </label>
+        <label className="space-y-2 text-sm">
+          <span className="text-slate-200">Số ghế</span>
+          <select
+            value={String(form.seatCount)}
+            onChange={(event) => updateField('seatCount', Number(event.target.value) as 4 | 7)}
+            className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none"
+          >
+            <option value="4">4</option>
+            <option value="7">7</option>
+          </select>
+        </label>
+        <label className="space-y-2 text-sm">
+          <span className="text-slate-200">Biển số xe</span>
+          <input
+            required
+            value={form.plateNumber}
+            onChange={(event) => updateField('plateNumber', event.target.value)}
+            className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none"
+          />
+        </label>
+        <label className="space-y-2 text-sm">
+          <span className="text-slate-200">Khu vực hoạt động</span>
+          <input
+            required
+            value={form.serviceArea}
+            onChange={(event) => updateField('serviceArea', event.target.value)}
+            className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none"
+          />
+        </label>
+        <label className="space-y-2 text-sm">
+          <span className="text-slate-200">Trạng thái duyệt</span>
+          <select
+            value={form.approvalStatus}
+            onChange={(event) => updateField('approvalStatus', event.target.value as FormState['approvalStatus'])}
+            className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none"
+          >
+            <option value="pending">Chờ xử lý</option>
+            <option value="approved">Đã duyệt</option>
+            <option value="rejected">Bị từ chối</option>
+          </select>
+        </label>
+      </div>
+
+      <label className="space-y-2 text-sm">
+        <span className="text-slate-200">Mô tả</span>
+        <textarea
+          rows={4}
+          value={form.description}
+          onChange={(event) => updateField('description', event.target.value)}
+          className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none"
+        />
+      </label>
+
+      <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-200">
+        <input
+          type="checkbox"
+          checked={form.active}
+          onChange={(event) => updateField('active', event.target.checked)}
+          className="h-4 w-4 rounded border-white/20 bg-slate-950/50 text-emerald-400"
+        />
+        Đang hoạt động
+      </label>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="space-y-3">
+          <p className="text-sm font-medium text-slate-200">Ảnh tài xế</p>
+          <div className="overflow-hidden rounded-2xl border border-white/10 bg-slate-950/50">
+            {driverPreview ? (
+              <img src={driverPreview} alt="Ảnh xem trước tài xế" className="h-56 w-full object-cover" />
+            ) : (
+              <div className="flex h-56 items-center justify-center text-sm text-slate-400">Chưa có ảnh tài xế</div>
+            )}
+          </div>
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            onChange={(event) => handleFileChange('driver', event)}
+            className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-slate-300 file:mr-4 file:rounded-xl file:border-0 file:bg-cyan-400 file:px-4 file:py-2 file:font-semibold file:text-slate-950"
+          />
+        </div>
+
+        <div className="space-y-3">
+          <p className="text-sm font-medium text-slate-200">Ảnh xe</p>
+          <div className="overflow-hidden rounded-2xl border border-white/10 bg-slate-950/50">
+            {vehiclePreview ? (
+              <img src={vehiclePreview} alt="Ảnh xem trước xe" className="h-56 w-full object-cover" />
+            ) : (
+              <div className="flex h-56 items-center justify-center text-sm text-slate-400">Chưa có ảnh xe</div>
+            )}
+          </div>
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            onChange={(event) => handleFileChange('vehicle', event)}
+            className="w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-slate-300 file:mr-4 file:rounded-xl file:border-0 file:bg-emerald-400 file:px-4 file:py-2 file:font-semibold file:text-slate-950"
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-3">
+        <button
+          type="submit"
+          disabled={submitting || uploading !== null}
+          className="rounded-2xl bg-emerald-400 px-5 py-3 text-sm font-semibold text-slate-950 disabled:opacity-60"
+        >
+          {submitting ? 'Đang tạo...' : 'Tạo tài xế'}
+        </button>
+        {uploading ? <p className="text-sm text-slate-400">Đang tải ảnh {formatUploadKind(uploading)}...</p> : null}
+      </div>
+
+      {message ? <p className="text-sm text-slate-300">{message}</p> : null}
+    </form>
+  );
+}

@@ -5,6 +5,15 @@ import { getSessionFromCookies } from '@/lib/auth/session';
 import { validateNonEmpty, validatePassengerCount, validatePositiveNumber } from '@/lib/validation';
 import { logError } from '@/lib/logging/errorLogger';
 
+function parseCoordinate(value: unknown, min: number, max: number) {
+  if (value === null || value === undefined || value === '') {
+    return null;
+  }
+
+  const numberValue = Number(value);
+  return Number.isFinite(numberValue) && numberValue >= min && numberValue <= max ? numberValue : Number.NaN;
+}
+
 export async function GET() {
   const session = await getSessionFromCookies();
   if (!session) {
@@ -43,6 +52,8 @@ export async function POST(request: Request) {
     const fareBase = Number(body.fareBase ?? 0);
     const farePerKm = Number(body.farePerKm ?? 0);
     const passengerCount = Number(body.passengerCount ?? 1);
+    const pickupLat = parseCoordinate(body.pickupLat, -90, 90);
+    const pickupLng = parseCoordinate(body.pickupLng, -180, 180);
 
     if (
       !validateNonEmpty(String(body.pickupLocation ?? '')) ||
@@ -50,7 +61,9 @@ export async function POST(request: Request) {
       !validatePassengerCount(passengerCount) ||
       !validatePositiveNumber(estimatedDistanceKm) ||
       !validatePositiveNumber(fareBase) ||
-      !validatePositiveNumber(farePerKm)
+      !validatePositiveNumber(farePerKm) ||
+      Number.isNaN(pickupLat) ||
+      Number.isNaN(pickupLng)
     ) {
       return NextResponse.json({ error: 'Dữ liệu chuyến đi không hợp lệ' }, { status: 400 });
     }
@@ -64,6 +77,8 @@ export async function POST(request: Request) {
       notes: String(body.notes ?? ''),
       driverId: body.driverId ? String(body.driverId) : null,
       routeType: body.routeType,
+      pickupLat,
+      pickupLng,
       passengerCount,
       estimatedDistanceKm,
       fareBase,
@@ -72,6 +87,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ booking }, { status: 201 });
   } catch (error) {
     logError(error, 'api/bookings');
-    return NextResponse.json({ error: 'Không thể tạo chuyến đi' }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : 'Không thể tạo chuyến đi' }, { status: 500 });
   }
 }

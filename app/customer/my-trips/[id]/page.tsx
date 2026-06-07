@@ -3,6 +3,7 @@ import { SectionCard } from '@/components/section-card';
 import { StatusBadge } from '@/components/status-badge';
 import { getSessionFromCookies } from '@/lib/auth/session';
 import { BookingHistory } from '@/components/booking-history';
+import { formatVehicleType } from '@/lib/display-labels';
 import { getBookingForActor } from '@/lib/services/rides';
 
 export default async function CustomerTripDetailPage({
@@ -20,7 +21,7 @@ export default async function CustomerTripDetailPage({
 
   return (
     <SectionCard
-      title={`${booking.pickupLocation} to ${booking.dropoffLocation}`}
+      title={`${booking.pickupLocation} → ${booking.dropoffLocation}`}
       description="Tóm tắt chuyến đi và trạng thái hiện tại."
     >
       <div className="space-y-3 text-sm text-slate-300">
@@ -29,7 +30,7 @@ export default async function CustomerTripDetailPage({
           Tài xế: <span className="text-white">{booking.driverSnapshot?.driverName ?? 'Đang chờ phân công'}</span>
         </p>
         <p>
-          Xe: <span className="text-white">{booking.vehicleSnapshot?.vehicleType ?? 'Đang chờ phân công'}</span>
+          Xe: <span className="text-white">{booking.vehicleSnapshot?.vehicleType ? formatVehicleType(booking.vehicleSnapshot.vehicleType) : 'Đang chờ phân công'}</span>
         </p>
         <p>
           Giá ước tính: <span className="text-white">{booking.estimatedFare ? `${booking.estimatedFare.toLocaleString()} VND` : 'Không có'}</span>

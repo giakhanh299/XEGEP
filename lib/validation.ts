@@ -36,8 +36,16 @@ export function validateUsername(username: string) {
   return /^[a-zA-Z0-9_.-]{3,32}$/.test(username.trim());
 }
 
+export function validateEmail(email: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+}
+
+export function validateLoginIdentifier(identifier: string) {
+  return validateEmail(identifier) || validateUsername(identifier);
+}
+
 export function validatePassword(password: string) {
-  return password.length >= 8;
+  return password.length > 0;
 }
 
 export function validateNonEmpty(value: string) {

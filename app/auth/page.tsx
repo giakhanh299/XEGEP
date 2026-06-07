@@ -1,7 +1,15 @@
 import { AuthForm } from '@/components/auth-form';
 import { SectionCard } from '@/components/section-card';
+import { getRoleHomePath } from '@/lib/auth/paths';
+import { getSessionFromCookies } from '@/lib/auth/session';
+import { redirect } from 'next/navigation';
 
-export default function AuthPage() {
+export default async function AuthPage() {
+  const session = await getSessionFromCookies();
+  if (session) {
+    redirect(getRoleHomePath(session.role));
+  }
+
   return (
     <main className="mx-auto min-h-screen max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
       <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">

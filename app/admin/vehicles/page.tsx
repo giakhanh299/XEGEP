@@ -1,5 +1,6 @@
 import { SectionCard } from '@/components/section-card';
 import { requireAdminSession } from '@/lib/auth/admin';
+import { formatApprovalStatus, formatVehicleType } from '@/lib/display-labels';
 import { listAllDriversAdmin } from '@/lib/services/accounts';
 
 export default async function AdminVehiclesPage() {
@@ -14,10 +15,10 @@ export default async function AdminVehiclesPage() {
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="font-semibold text-white">{driver.plateNumber}</p>
-                <p className="text-sm text-slate-400">{driver.vehicleType}</p>
+                <p className="text-sm text-slate-400">{formatVehicleType(driver.vehicleType)}</p>
               </div>
               <span className="rounded-full border border-white/10 bg-slate-950/50 px-3 py-1 text-xs text-slate-200">
-                {driver.approvalStatus}
+                {formatApprovalStatus(driver.approvalStatus)}
               </span>
             </div>
             <div className="mt-3 grid gap-2 text-sm text-slate-300">

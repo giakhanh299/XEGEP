@@ -1,6 +1,7 @@
 import { SectionCard } from '@/components/section-card';
 import { calculateTripScore, groupBookingsIntoTrips, recommendDepartureTime } from '@/lib/ai/dispatchEngine';
 import { predictRouteDemand } from '@/lib/ai/demandPredictor';
+import { formatDemandLevel, formatRouteType } from '@/lib/display-labels';
 import { mockBookings, mockTrips } from '@/lib/mock-data';
 
 export default function AdminAiDispatchPage() {
@@ -17,7 +18,7 @@ export default function AdminAiDispatchPage() {
                 <div>
                   <p className="font-semibold text-white">Chuyến gợi ý {index + 1}</p>
                   <p className="text-sm text-slate-400">
-                    {trip.routeType} - {trip.passengerCount}/{trip.maxCapacity} ghế
+                    {formatRouteType(trip.routeType)} - {trip.passengerCount}/{trip.maxCapacity} ghế
                   </p>
                 </div>
                 <span className="rounded-full bg-emerald-400/10 px-3 py-1 text-xs font-semibold text-emerald-200">
@@ -41,7 +42,7 @@ export default function AdminAiDispatchPage() {
             Chuyến hiện có: {mockTrips.length}
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-slate-200">
-            Nhu cầu tuyến: {routeDemand.demandLevel} ({routeDemand.confidence})
+            Nhu cầu tuyến: {formatDemandLevel(routeDemand.demandLevel)} ({routeDemand.confidence})
           </div>
         </div>
       </SectionCard>

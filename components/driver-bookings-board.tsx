@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { BookingRecord } from '@/lib/types';
 import { StatusBadge } from '@/components/status-badge';
 import { getLatestBookingStatusLabel } from '@/lib/booking-history';
+import { formatBookingStatus } from '@/lib/display-labels';
 
 const actions = [
   { label: 'Nhận chuyến', status: 'accepted' },
@@ -36,7 +37,7 @@ export function DriverBookingsBoard({ bookings }: { bookings: BookingRecord[] })
               <div>
                 <p className="font-semibold text-white">{booking.customerName}</p>
                 <p className="text-sm text-slate-400">
-                  {booking.pickupLocation} to {booking.dropoffLocation}
+                  {booking.pickupLocation} → {booking.dropoffLocation}
                 </p>
               </div>
               <StatusBadge status={booking.status} />
@@ -49,7 +50,7 @@ export function DriverBookingsBoard({ bookings }: { bookings: BookingRecord[] })
                 <strong className="text-white">Điện thoại:</strong> {booking.phone}
               </p>
               <p className="sm:col-span-2">
-                <strong className="text-white">Cập nhật gần nhất:</strong> {latestUpdate.status} lúc {latestUpdate.timestamp}
+                <strong className="text-white">Cập nhật gần nhất:</strong> {formatBookingStatus(latestUpdate.status)} lúc {latestUpdate.timestamp}
               </p>
             </div>
             {booking.notes ? <p className="mt-2 text-sm text-slate-300">{booking.notes}</p> : null}

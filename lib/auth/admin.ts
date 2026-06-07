@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation';
+import { getRoleHomePath } from '@/lib/auth/paths';
 import { getSessionFromCookies } from '@/lib/auth/session';
 import type { UserRole } from '@/lib/types';
 
@@ -16,7 +17,12 @@ export async function getAdminSession() {
 }
 
 export async function requireAdminSession(redirectTo = '/auth') {
-  const session = await getAdminSession();
+  const rawSession = await getSessionFromCookies();
+  if (rawSession && !isAdminRole(rawSession.role)) {
+    redirect(getRoleHomePath(rawSession.role));
+  }
+
+  const session = rawSession && isAdminRole(rawSession.role) ? rawSession : null;
   if (!session) {
     redirect(redirectTo);
   }

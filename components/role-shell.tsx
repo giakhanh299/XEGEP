@@ -1,6 +1,8 @@
 import { ReactNode } from 'react';
 import { BottomNav, type NavItem } from '@/components/bottom-nav';
+import { LogoutButton } from '@/components/logout-button';
 import { SidebarNav } from '@/components/sidebar-nav';
+import { formatRoleLabel } from '@/lib/display-labels';
 
 export function RoleShell({
   children,
@@ -27,12 +29,15 @@ export function RoleShell({
           <header className="glass rounded-[1.75rem] px-5 py-4">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-sm uppercase tracking-[0.22em] text-emerald-300">{role}</p>
+                <p className="text-sm uppercase tracking-[0.22em] text-emerald-300">{formatRoleLabel(role)}</p>
                 <h1 className="text-2xl font-black text-white">{title}</h1>
                 <p className="mt-1 text-sm text-slate-300">{description}</p>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-200">
-                Đặt xe Đại Lộc
+              <div className="flex shrink-0 items-center gap-2">
+                <div className="hidden rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-200 sm:block">
+                  App
+                </div>
+                <LogoutButton />
               </div>
             </div>
           </header>

@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react';
-import { getSessionFromCookies } from '@/lib/auth/session';
+import { requireRole } from '@/lib/auth/guards';
 import { countUnreadNotifications } from '@/lib/services/notifications';
 import { RoleShell } from '@/components/role-shell';
 
 export default async function DriverLayout({ children }: Readonly<{ children: ReactNode }>) {
-  const session = await getSessionFromCookies();
-  const notificationCount = session?.role ? await countUnreadNotifications({ userId: session.userId, role: session.role }) : 0;
+  const session = await requireRole('driver');
+  const notificationCount = await countUnreadNotifications({ userId: session.userId, role: session.role });
 
   return (
     <RoleShell

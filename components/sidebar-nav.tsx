@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { formatRoleLabel } from '@/lib/display-labels';
 
 function getNavKind(role: string) {
   const normalized = role.toLowerCase();
@@ -63,7 +64,7 @@ export function SidebarNav({
   return (
     <div className="glass flex h-full flex-col rounded-[1.75rem] p-4">
       <div className="rounded-[1.4rem] border border-white/10 bg-white/5 p-5">
-        <p className="text-sm uppercase tracking-[0.22em] text-emerald-300">{role}</p>
+        <p className="text-sm uppercase tracking-[0.22em] text-emerald-300">{formatRoleLabel(role)}</p>
         <h2 className="mt-1 text-xl font-black text-white">{title}</h2>
         <p className="mt-2 text-sm leading-6 text-slate-300">{description}</p>
       </div>

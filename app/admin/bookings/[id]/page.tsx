@@ -5,6 +5,7 @@ import { StatusBadge } from '@/components/status-badge';
 import { BookingHistory } from '@/components/booking-history';
 import { AdminActionButton } from '@/components/admin/action-buttons';
 import { requireAdminSession } from '@/lib/auth/admin';
+import { formatBookingStatus, formatVehicleType } from '@/lib/display-labels';
 import { getBooking } from '@/lib/services/rides';
 
 const bookingStatuses = ['confirmed', 'matching', 'driver_assigned', 'on_the_way', 'completed', 'cancelled'] as const;
@@ -65,7 +66,7 @@ export default async function AdminBookingDetailPage({
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
             <p className="mb-2 text-base font-semibold text-white">Thông tin xe</p>
             <p>
-              <strong className="text-white">Loại:</strong> {booking.vehicleSnapshot?.vehicleType ?? 'Không có'}
+              <strong className="text-white">Loại:</strong> {formatVehicleType(booking.vehicleSnapshot?.vehicleType)}
             </p>
             <p>
               <strong className="text-white">Biển số:</strong> {booking.vehicleSnapshot?.plateNumber ?? 'Không có'}
@@ -103,7 +104,7 @@ export default async function AdminBookingDetailPage({
           {bookingStatuses.map((status) => (
             <AdminActionButton
               key={status}
-              label={status.replace('_', ' ')}
+              label={formatBookingStatus(status)}
               endpoint={`/api/admin/bookings/${booking.id}`}
               payload={{ status }}
             />

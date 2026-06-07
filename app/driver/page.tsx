@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { SectionCard } from '@/components/section-card';
 import { StatCard } from '@/components/stat-card';
+import { StatusBadge } from '@/components/status-badge';
 import { getSessionFromCookies } from '@/lib/auth/session';
 import { getDriverDashboardBookings } from '@/lib/services/rides';
 
@@ -18,16 +19,14 @@ export default async function DriverHomePage() {
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <p className="font-semibold text-white">
-                    {booking.pickupLocation} to {booking.dropoffLocation}
+                    {booking.pickupLocation} → {booking.dropoffLocation}
                   </p>
                   <p className="text-sm text-slate-400">{booking.bookingTime ?? booking.createdAt}</p>
                   <p className="text-sm text-slate-400">
                     Giá ước tính: {booking.estimatedFare ? `${booking.estimatedFare.toLocaleString()} VND` : 'Không có'}
                   </p>
                 </div>
-                <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs text-emerald-200">
-                  {booking.status}
-                </span>
+                <StatusBadge status={booking.status} />
               </div>
               <Link href="/driver/bookings" className="mt-3 inline-flex text-sm font-semibold text-emerald-300">
                 Xem thao tác

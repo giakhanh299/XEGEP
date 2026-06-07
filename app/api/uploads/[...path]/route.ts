@@ -9,7 +9,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ path: stri
   const file = await serveUploadedImage(storageKey);
 
   if (!file) {
-    return NextResponse.json({ error: 'Image not found' }, { status: 404 });
+    return NextResponse.json({ error: 'Không tìm thấy ảnh' }, { status: 404 });
   }
 
   return new NextResponse(file.body, {
